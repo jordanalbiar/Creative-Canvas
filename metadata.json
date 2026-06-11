@@ -1,0 +1,12 @@
+{
+  "name": "Creative-Canvas",
+  "description": "A dynamic canvas application to create and manage scenes with various media sources like images, videos, text, and browser iframes. Features a toggleable UI for source and scene management, and interactive, editable sources on the canvas.",
+  "requestFramePermissions": [
+    "camera",
+    "display-capture",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
