@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="screenshot" src="https://github.com/jordanalbiar/Creative-Canvas/blob/main/Screenshot_20260611_133149.png?raw=true" />
+<img width="1200" height="475" alt="screenshot" src="" />
 </div>
 
 # 🎨 Creative Canvas Studio
@@ -37,4 +37,6 @@ Heavy active web content compositor render loops can utilize significant client 
 3. **Isolate Code Elements** – Throttle intensive setInterval loops in your Code Sandbox sources to preserve main-thread processing memory.
 
 
-<img width="1200" height="475" alt="screenshot" src="[https://github.com/jordanalbiar/Creative-Canvas/blob/main/Screenshot_20260611_133149.png?raw=true](https://raw.githubusercontent.com/jordanalbiar/Creative-Canvas/refs/heads/main/Screenshot_20260611_130604.png)" />
+<div align="center">
+<img width="1200" height="475" alt="screenshot" src="https://raw.githubusercontent.com/jordanalbiar/Creative-Canvas/refs/heads/main/Screenshot_20260611_130604.png" />
+</div>
