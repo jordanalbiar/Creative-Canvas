@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="screenshot" src="" />
+<img width="1200" height="475" alt="screenshot" src="https://github.com/jordanalbiar/Creative-Canvas/blob/main/Screenshot_20260611_133149.png?raw=true" />
 </div>
 
 # 🎨 Creative Canvas Studio
