@@ -102,34 +102,33 @@
   .btn-small{ padding:6px 14px; font-size:1rem; }
 
   /* ---------- hero ---------- */
-  .hero{ padding-top:20px; padding-bottom:10px; }
-  .hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center; }
-  .hero-logo{ width:min(300px, 72%); height:auto; display:block; margin-bottom:6px; }
-  .hero h1{ font-size:clamp(1.75rem, 5vw, 3.4rem); }
+  .hero{ padding-top:22px; padding-bottom:10px; text-align:center; }
+  /* dog + logo lockup: one centered pair, dog on the left of the logo,
+     no box, no frame, the pup sits straight on the board */
+  .hero-brand{
+    display:flex; align-items:center; justify-content:center;
+    gap:clamp(8px, 3vw, 30px); max-width:860px; margin:0 auto 4px;
+  }
+  .hero-logo{ width:min(360px, 54%); height:auto; display:block; }
+  /* the chalk dog is a looping GIF whose black background is chroma keyed
+     to transparency (the app's key-out effect), so he floats on the board */
+  .chroma-dog{
+    background:transparent; border:none; box-shadow:none;
+    filter:drop-shadow(0 5px 9px rgba(0,0,0,.45));
+  }
+  .hero-dog{ width:min(320px, 42%); height:auto; display:block; }
+  .hero-dog-cap{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    color:var(--chalk-dim); font-size:clamp(.88rem, 2.3vw, 1rem); margin:2px auto 0; max-width:36rem;
+  }
+  .hero-dog-cap .star{ color:var(--yellow); font-size:1.15rem; }
+  .hero h1{ font-size:clamp(1.75rem, 5vw, 3.4rem); margin-top:10px; }
   .hero h1 .u-yellow{ color:var(--yellow); }
-  .hero p.lede{ font-size:clamp(1rem, 2.6vw, 1.2rem); color:var(--chalk-dim); max-width:34rem; margin:12px 0 4px; }
+  .hero p.lede{ font-size:clamp(1rem, 2.6vw, 1.2rem); color:var(--chalk-dim); max-width:38rem; margin:12px auto 4px; }
   .hero p.lede strong{ color:var(--chalk); font-weight:400; text-decoration:underline dashed var(--pink) 2px; text-underline-offset:5px; }
-  .hero-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .hero-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; justify-content:center; }
   .hero-note{ margin-top:12px; color:var(--chalk-faint); font-size:clamp(.85rem, 2.2vw, .96rem); }
-  .squiggle{ display:block; margin-top:14px; }
-
-  .chalk-frame{
-    position:relative; border:3px solid rgba(245,241,227,.85); border-radius:6px;
-    box-shadow:0 0 0 6px rgba(0,0,0,.18), 10px 14px 30px rgba(0,0,0,.45);
-    background:#10141a; overflow:hidden;
-  }
-  .chalk-frame::before, .chalk-frame::after{
-    content:""; position:absolute; width:92px; height:26px; z-index:3;
-    background:rgba(255,217,104,.5); border:1px solid rgba(0,0,0,.12);
-  }
-  .chalk-frame::before{ top:-8px; left:26px; transform:rotate(-5deg); }
-  .chalk-frame::after{ top:-8px; right:26px; transform:rotate(4deg); }
-  .chalk-frame video, .chalk-frame img{ display:block; width:100%; height:auto; }
-  .frame-cap{
-    display:flex; align-items:center; gap:10px; padding:10px 14px;
-    background:rgba(16,20,23,.88); color:var(--chalk-dim); font-size:1rem;
-  }
-  .frame-cap .star{ color:var(--yellow); font-size:1.2rem; }
+  .squiggle{ display:block; margin:14px auto 0; }
 
   /* ---------- studio dock: the app's own panels, as a strip ---------- */
   .studio-dock{
@@ -245,22 +244,59 @@
     position:relative; aspect-ratio:16/9; border:3px solid rgba(245,241,227,.85); border-radius:6px;
     overflow:hidden; background:#0c0f12 url(assets/chalkboard.jpg) center/cover;
     box-shadow:10px 14px 30px rgba(0,0,0,.45);
-    transition:opacity .28s ease, transform .28s var(--ease-pop);
   }
-  .stage.is-switching{ opacity:0; transform:translateY(6px) scale(.985); }
-  .stage .layer{ position:absolute; }
-  .stage video.layer{ object-fit:cover; background:#000; }
-  .stage img.layer{ object-fit:contain; }
-  .stage .codebox{
-    border:2px solid rgba(245,241,227,.8); background:rgba(0,0,0,.55); overflow:hidden;
+  /* the chalkboard itself is the background source: locked, never a node */
+  .stage-lock{
+    position:absolute; left:10px; top:10px; z-index:40; pointer-events:none;
+    background:rgba(10,12,14,.74); border:1px dashed rgba(245,241,227,.55);
+    color:var(--chalk-dim); font-size:.8rem; padding:3px 11px; border-radius:999px;
   }
-  .stage .codebox canvas{ display:block; width:100%; height:100%; }
-  .stage .txtbox{ color:var(--chalk); text-align:center; font-size:clamp(.62rem, 1.6vw, 1rem); line-height:1.45; padding:6px; overflow:hidden; }
-  .stage .blank-note{
-    inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-    color:var(--chalk-faint); font-family:"Caveat",cursive; font-size:clamp(1.4rem,3.4vw,2.2rem); text-align:center; padding:20px;
+  /* interactive sources: drag to move, yellow corner to scale.
+     left/top/width/height transition is the app's Move transition:
+     switching scenes glides every shared source to its new spot */
+  .src-node{
+    position:absolute; margin:0; cursor:grab; touch-action:none;
+    user-select:none; -webkit-user-select:none;
+    transition:left .62s cubic-bezier(.3,.7,.25,1), top .62s cubic-bezier(.3,.7,.25,1),
+               width .62s cubic-bezier(.3,.7,.25,1), height .62s cubic-bezier(.3,.7,.25,1),
+               opacity .35s ease, transform .62s cubic-bezier(.3,.7,.25,1);
   }
-  .stage-cap{ margin-top:10px; color:var(--chalk-dim); font-size:clamp(.9rem, 2.4vw, 1.02rem); max-width:46rem; transition:opacity .28s ease, transform .28s var(--ease-pop); }
+  .src-node.no-anim{ transition:none !important; }
+  .src-node.is-dragging, .src-node.is-scaling{ transition:none !important; cursor:grabbing; z-index:35 !important; }
+  .src-node.is-selected{ outline:2px dashed var(--yellow); outline-offset:3px; z-index:30 !important; }
+  .src-node .fill{ display:block; width:100%; height:100%; transition:transform .62s cubic-bezier(.3,.7,.25,1); }
+  .src-node img.fill{ object-fit:contain; pointer-events:none; }
+  .src-node .codebox{
+    border:2px solid rgba(245,241,227,.8); background:rgba(0,0,0,.55); overflow:hidden; pointer-events:none;
+  }
+  .src-node .codebox canvas{ display:block; width:100%; height:100%; }
+  .src-node .txtbox{ color:var(--chalk); text-align:center; font-size:clamp(.62rem, 1.6vw, 1rem); line-height:1.45; padding:6px; overflow:hidden; pointer-events:none; }
+  .src-node .blank-note{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    color:var(--chalk-faint); font-family:"Caveat",cursive; font-size:clamp(1.4rem,3.4vw,2.2rem); text-align:center; padding:20px; pointer-events:none;
+  }
+  .src-tag{
+    position:absolute; left:0; top:-24px; z-index:5; white-space:nowrap;
+    background:rgba(10,12,14,.78); color:var(--yellow); border-radius:999px;
+    font-size:.72rem; padding:1px 8px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .src-node.is-selected .src-tag{ opacity:1; }
+  .src-handle{
+    position:absolute; right:-10px; bottom:-10px; z-index:6; width:22px; height:22px;
+    border-radius:50%; background:var(--yellow); border:2px solid #23282c;
+    box-shadow:0 2px 6px rgba(0,0,0,.5); cursor:nwse-resize; touch-action:none;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s var(--ease-pop);
+  }
+  .src-handle::after{ content:""; position:absolute; inset:5px; border-right:2px solid #23282c; border-bottom:2px solid #23282c; border-bottom-right-radius:3px; }
+  .src-node.is-selected .src-handle{ opacity:1; pointer-events:auto; }
+  .src-handle:hover{ transform:scale(1.15); }
+  .stage-tools{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:10px;
+  }
+  .stage-hint{ margin:0; color:var(--chalk-faint); font-size:clamp(.85rem, 2.3vw, .96rem); }
+  .stage-hint b{ color:var(--yellow); font-weight:400; }
+  .stage-tools .btn{ margin-left:auto; }
+  .stage-cap{ margin-top:10px; color:var(--chalk-dim); font-size:clamp(.9rem, 2.4vw, 1.02rem); max-width:46rem; transition:opacity .25s ease, transform .25s var(--ease-pop); }
   .stage-cap.is-switching{ opacity:0; transform:translateY(4px); }
   .stage-cap strong{ color:var(--yellow); font-weight:400; }
 
@@ -312,7 +348,7 @@
   .open-panel h2{ font-size:clamp(1.6rem, 5vw, 3rem); }
   .open-panel p{ color:var(--chalk-dim); max-width:38rem; margin:10px auto 0; font-size:clamp(.92rem, 2.5vw, 1.08rem); }
   .open-panel .hero-cta{ justify-content:center; }
-  .open-panel .mini-dog{ width:130px; margin:0 auto 6px; border-radius:8px; overflow:hidden; border:1px solid var(--panel-line); }
+  .open-panel .mini-dog{ width:170px; max-width:60%; margin:0 auto 2px; }
   .open-panel .mini-dog img{ width:100%; display:block; }
 
   /* ---------- footer ---------- */
@@ -320,7 +356,7 @@
   .foot-in{ max-width:1120px; margin:0 auto; padding:22px 20px 20px; }
   .foot-grid{ display:grid; grid-template-columns:300px 1fr; gap:30px; align-items:start; }
   .dog-box{ position:relative; }
-  .dog-box .chalk-frame img{ aspect-ratio:688/464; object-fit:cover; }
+  .dog-box .foot-dog{ display:block; width:100%; height:auto; }
   .dog-note{
     position:absolute; inset:auto 10px 10px 10px; z-index:5;
     background:#fdfbef; color:#2c2c26; border-radius:4px; padding:12px 14px;
@@ -373,6 +409,7 @@
     opacity:0; visibility:hidden;
     transition:opacity .32s ease, visibility 0s linear .32s;
   }
+  .modal-back[hidden]{ display:none; }
   .modal-back.open{
     opacity:1; visibility:visible;
     transition:opacity .32s ease, visibility 0s;
@@ -394,8 +431,8 @@
   .modal-box iframe{ flex:1; width:100%; border:0; background:#0c0f12; }
 
   @media (max-width: 900px){
-    .hero-grid{ grid-template-columns:1fr; gap:16px; }
-    .hero-logo{ width:min(230px, 58%); }
+    .hero-logo{ width:min(300px, 54%); }
+    .hero-dog{ width:min(250px, 40%); }
     .glance-grid{ grid-template-columns:repeat(2, 1fr); gap:4px 20px; }
     .cards{ grid-template-columns:1fr 1fr; gap:9px; }
     .src-grid{ grid-template-columns:repeat(5, 1fr); gap:8px; }
@@ -403,6 +440,35 @@
     .two-col{ grid-template-columns:1fr; gap:14px; }
     .foot-grid{ grid-template-columns:1fr; gap:16px; }
     .dog-box{ max-width:340px; }
+    /* mobile: text and elements sit centered, like the hero does */
+    .bar-in{ justify-content:center; }
+    nav.mainnav{ margin-left:0; justify-content:center; }
+    .studio-dock{ justify-content:center; }
+    .theme-strip{ justify-content:center; }
+    .sec-head{ justify-content:center; text-align:center; }
+    .sec-sub{ margin-left:auto; margin-right:auto; text-align:center; }
+    .group-title{ justify-content:center; text-align:center; }
+    .card{ text-align:center; }
+    .glance h2, .glance .glance-sub{ text-align:center; }
+    .glance-group{ text-align:center; }
+    .glance-group a{ justify-content:center; }
+    .scene-tabs{ justify-content:center; }
+    .stage-cap{ margin-left:auto; margin-right:auto; text-align:center; }
+    .stage-tools{ justify-content:center; text-align:center; }
+    .stage-tools .btn{ margin-left:0; }
+    #scenes .hero-cta{ justify-content:center; }
+    .step{ text-align:center; }
+    .step .num{ margin-left:auto; margin-right:auto; }
+    .tip{ text-align:center; border-left:none; border-top:3px solid var(--green); padding:10px 4px 0; }
+    details.faq summary{ justify-content:center; text-align:center; }
+    details.faq summary::after{ margin-left:10px; }
+    details.faq p{ text-align:center; }
+    .foot-links{ text-align:center; }
+    .foot-links p{ margin-left:auto; margin-right:auto; }
+    .foot-links ul{ justify-content:center; }
+    .chips{ justify-content:center; }
+    .dog-box{ margin-left:auto; margin-right:auto; }
+    .foot-base{ justify-content:center; text-align:center; }
   }
   @media (max-width: 560px){
     html{ font-size:14px; }
@@ -414,12 +480,12 @@
     nav.mainnav{ flex-wrap:wrap; margin-left:auto; gap:2px; }
     .navlink{ padding:5px 9px; font-size:.9rem; white-space:nowrap; }
     .hero{ padding-top:14px; padding-bottom:6px; }
-    .hero-grid{ gap:12px; }
-    .hero-grid figure{ max-width:330px; width:100%; margin:0 auto; }
-    .hero-logo{ width:min(200px, 56%); margin-bottom:2px; }
+    .hero-brand{ gap:6px; }
+    .hero-logo{ width:56%; }
+    .hero-dog{ width:41%; }
     .hero-cta{ gap:8px; margin-top:12px; }
     .btn{ padding:7px 13px; }
-    .frame-cap{ padding:7px 10px; font-size:.86rem; }
+    .hero-dog-cap{ font-size:.86rem; padding:0 6px; }
     .glance{ padding:12px 12px 10px; }
     .panel-head{ margin:-12px -12px 10px; padding:6px 10px; }
     .glance-grid{ grid-template-columns:1fr; gap:2px 0; }
@@ -490,26 +556,20 @@
 
   <!-- HERO -->
   <div class="hero wrap">
-    <div class="hero-grid">
-      <div>
-        <img class="hero-logo" src="assets/creative-canvas-logo.png" alt="Creative Canvas, chalk drawing of an easel with the name written in chalk" />
-        <h1>Your studio, <span class="u-yellow">drawn in chalk.</span></h1>
-        <p class="lede">Creative Canvas is a <strong>browser based studio</strong> for building live scenes, the way OBS does it, with nothing to install. Stack text, images, video, cameras, web pages and your own code on one canvas, switch scenes with a tap, and present, stream or record from any modern browser.</p>
-        <div class="hero-cta">
-          <a class="btn btn-chalk" href="https://jordanalbiar.github.io/Creative-Canvas/" target="_blank" rel="noopener">Open Creative Canvas</a>
-          <button class="btn btn-ghost" type="button" data-open-demo>Try the demo here</button>
-          <a class="btn btn-ghost" href="https://github.com/jordanalbiar/Creative-Canvas" target="_blank" rel="noopener">View on GitHub</a>
-        </div>
-        <p class="hero-note">Free to use, runs entirely in your browser, and your projects export to a file you keep.</p>
-        <svg class="squiggle" width="220" height="14" viewBox="0 0 220 14" aria-hidden="true"><path d="M3 9 C 30 2, 55 13, 82 7 S 140 3, 165 8 S 205 12, 217 6" fill="none" stroke="#ffa8c0" stroke-width="3.5" stroke-linecap="round" opacity=".85"/></svg>
-      </div>
-      <figure style="margin:0 auto">
-        <div class="chalk-frame">
-          <img id="heroDog" class="dog-gif" src="assets/chalk-dog.gif" alt="Chalk animation of a dachshund walking on a chalkboard" />
-          <figcaption class="frame-cap"><span class="star" aria-hidden="true">&#9733;</span> This chalk pup is the demo clip that ships inside the app, drawn right on the board.</figcaption>
-        </div>
-      </figure>
+    <div class="hero-brand">
+      <img id="heroDog" class="hero-dog chroma-dog dog-gif" src="assets/chalk-dog.gif" alt="Chalk animation of a dachshund walking, background keyed out so he walks straight on the board" />
+      <img class="hero-logo" src="assets/creative-canvas-logo.png" alt="Creative Canvas, chalk drawing of an easel with the name written in chalk" />
     </div>
+    <p class="hero-dog-cap"><span class="star" aria-hidden="true">&#9733;</span> This chalk pup is the demo clip that ships inside the app, a looping GIF, chroma keyed so his background is gone and he walks right on the board.</p>
+    <h1>Your studio, <span class="u-yellow">drawn in chalk.</span></h1>
+    <p class="lede">Creative Canvas is a <strong>browser based studio</strong> for building live scenes, the way OBS does it, with nothing to install. Stack text, images, video, cameras, web pages and your own code on one canvas, switch scenes with a tap, and present, stream or record from any modern browser.</p>
+    <div class="hero-cta">
+      <a class="btn btn-chalk" href="https://jordanalbiar.github.io/Creative-Canvas/" target="_blank" rel="noopener">Open Creative Canvas</a>
+      <button class="btn btn-ghost" type="button" data-open-demo>Try the demo here</button>
+      <a class="btn btn-ghost" href="https://github.com/jordanalbiar/Creative-Canvas" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+    <p class="hero-note">Free to use, runs entirely in your browser, and your projects export to a file you keep.</p>
+    <svg class="squiggle" width="220" height="14" viewBox="0 0 220 14" aria-hidden="true"><path d="M3 9 C 30 2, 55 13, 82 7 S 140 3, 165 8 S 205 12, 217 6" fill="none" stroke="#ffa8c0" stroke-width="3.5" stroke-linecap="round" opacity=".85"/></svg>
   </div>
 
   <!-- AT A GLANCE -->
@@ -625,14 +685,20 @@
       <h2 id="scenes-h">The demo scenes</h2>
       <span class="tag">already on the board when you arrive</span>
     </div>
-    <p class="sec-sub">The app opens with four scenes ready to explore. Flip through them here, rebuilt on this page from the app&rsquo;s own chalkboard, logo and chalk dog video, then open the real thing to play with the originals.</p>
+    <p class="sec-sub">The app opens with four scenes ready to explore. These ones are live: drag any source to move it, pull its yellow corner to scale it, and flip scenes to watch everything glide with the app&rsquo;s Move transition. The chalkboard background stays locked, just like in the app.</p>
     <div class="scene-tabs" role="tablist" aria-label="Demo scenes">
       <button class="scene-tab" role="tab" id="tab-main" aria-selected="true" aria-controls="stageBox" data-scene="main" type="button">Main Scene</button>
       <button class="scene-tab" role="tab" id="tab-code" aria-selected="false" aria-controls="stageBox" data-scene="code" type="button">Code Example</button>
       <button class="scene-tab" role="tab" id="tab-bg" aria-selected="false" aria-controls="stageBox" data-scene="background" type="button">Background Scene</button>
       <button class="scene-tab" role="tab" id="tab-blank" aria-selected="false" aria-controls="stageBox" data-scene="blank" type="button">Blank</button>
     </div>
-    <div class="stage" id="stageBox" role="tabpanel" aria-live="polite"></div>
+    <div class="stage" id="stageBox" role="tabpanel" aria-live="polite">
+      <span class="stage-lock" aria-hidden="true">&#128274; Background &middot; locked</span>
+    </div>
+    <div class="stage-tools">
+      <p class="stage-hint"><b>Try it:</b> drag a source to move it &middot; drag the yellow corner to scale &middot; arrow keys nudge the selected source</p>
+      <button class="btn btn-ghost btn-small" type="button" id="resetLayout">Reset layout</button>
+    </div>
     <p class="stage-cap" id="stageCap"></p>
     <div class="hero-cta">
       <button class="btn btn-chalk" type="button" data-open-demo>Open these scenes in the app</button>
@@ -698,7 +764,7 @@
   <!-- OPEN APP -->
   <section class="wrap" aria-labelledby="open-h">
     <div class="open-panel">
-      <div class="mini-dog"><img class="dog-gif" src="assets/chalk-dog.gif" alt="The chalk dachshund, animated" /></div>
+      <div class="mini-dog"><img class="dog-gif chroma-dog" src="assets/chalk-dog.gif" alt="The chalk dachshund walking, background keyed out" /></div>
       <h2 id="open-h">The board is waiting</h2>
       <p>No download and no install. Open the live app, keep the demo scenes or wipe the board clean, and make something worth framing.</p>
       <div class="hero-cta">
@@ -715,9 +781,7 @@
   <div class="foot-in">
     <div class="foot-grid">
       <div class="dog-box">
-        <div class="chalk-frame">
-          <img id="footDog" class="dog-gif" src="assets/chalk-dog.gif" alt="The chalk dachshund walking on the chalkboard" />
-        </div>
+        <img id="footDog" class="dog-gif chroma-dog foot-dog" src="assets/chalk-dog.gif" alt="The chalk dachshund walking, background keyed out so he walks straight on the board" />
         <div class="dog-note" id="dogNote" role="status">
           <button class="close-note" type="button" id="noteClose" aria-label="Close note">&times;</button>
           <h3 id="noteTitle"></h3>
@@ -767,11 +831,9 @@
   "use strict";
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) {
-    document.querySelectorAll("video[autoplay]").forEach(function(v){
-      v.removeAttribute("autoplay"); v.pause(); v.setAttribute("controls","");
-    });
+    /* still frame of the same keyed GIF, so the pup keeps his clear background */
     document.querySelectorAll("img.dog-gif").forEach(function(g){
-      g.src = "assets/chalk-dog-poster.jpg";
+      g.src = "assets/chalk-dog-still.png";
     });
   }
 
@@ -802,26 +864,105 @@
     grid.appendChild(d);
   });
 
-  /* ---------- demo scene stage ---------- */
+  /* ---------- demo scene stage: live, like the app ----------
+     The chalkboard is the background source and stays locked.
+     Every other source is a node you can drag to move and pull
+     by its yellow corner to scale. Scene switches reuse the same
+     nodes, so the CSS transition on left/top/width/height plays
+     the app's Move transition: shared sources glide to their new
+     spots, new ones fade in, leaving ones fade out. */
   var stage = document.getElementById("stageBox");
   var cap = document.getElementById("stageCap");
   var LOGO = "assets/creative-canvas-logo.png";
-  var DOG = "assets/chalk-dog.mp4";
-  var POSTER = "assets/chalk-dog-poster.jpg";
+  var DOGGIF = "assets/chalk-dog.gif";
+  var DOGSTILL = "assets/chalk-dog-still.png";
   var captions = {
-    main: "<strong>Main Scene.</strong> The chalkboard background fills the canvas, the Creative Canvas logo sits low on the right, and the dog video plays in front of it, color keyed so the pup walks straight onto the board.",
-    code: "<strong>Code Example.</strong> Two live Code sources share this scene, a Matrix rain and falling snow, rendered from raw HTML, CSS and JavaScript. The panel on the right is a Text source explaining the app, under a smaller logo.",
-    background: "<strong>Background Scene.</strong> The dog, supersized. The dog video takes the right half of the board, flipped to face the big logo on the left, all over the same chalkboard background.",
-    blank: "<strong>Blank.</strong> An empty scene with the board wiped clean. Every great lesson, stream and terrible doodle starts here."
+    main: "<strong>Main Scene.</strong> The chalkboard background fills the canvas and stays locked, the Creative Canvas logo sits low on the right, and the chalk dog trots in front of it, a looping GIF, chroma keyed so the pup walks straight onto the board. Drag him somewhere new.",
+    code: "<strong>Code Example.</strong> Two live Code sources share this scene, a Matrix rain and falling snow, rendered from raw HTML, CSS and JavaScript. The panel on the right is a Text source explaining the app, under a smaller logo. Every source here moves and scales too.",
+    background: "<strong>Background Scene.</strong> The dog, supersized. The keyed GIF takes the right half of the board, flipped to face the big logo on the left, all over the same locked chalkboard background.",
+    blank: "<strong>Blank.</strong> An empty scene with the board wiped clean. Even the note is a source, so drag it around. Every great lesson, stream and terrible doodle starts here."
   };
-  var rainTimer = null;
-  function stopRain(){ if (rainTimer){ clearInterval(rainTimer); rainTimer = null; } }
+  /* source builders: inner content per source id */
+  function nodeFill(id){
+    if (id === "logo") return '<img class="fill" src="' + LOGO + '" alt="Creative Canvas chalk logo" draggable="false">';
+    if (id === "dog") return '<img class="fill chroma-dog" src="' + (reduced ? DOGSTILL : DOGGIF) + '" alt="Chalk dog, a looping GIF with its background chroma keyed out" draggable="false">';
+    if (id === "rain") return '<div class="fill codebox"><canvas id="rainCanvas" aria-label="Matrix rain code effect"></canvas></div>';
+    if (id === "snow") return '<div class="fill codebox"><canvas id="snowCanvas" aria-label="Falling snow code effect"></canvas></div>';
+    if (id === "text") return '<div class="fill txtbox">A dynamic canvas application to create and manage scenes with various media sources like images, videos, text, and browser iframes.</div>';
+    return '<div class="fill blank-note"><span>Nothing here yet.</span><span style="font-size:.62em;color:var(--chalk-dim)">That is the point of a blank board.</span></div>';
+  }
+  var nodeTags = {
+    logo: "Logo &middot; image", dog: "Chalk dog &middot; GIF, keyed",
+    rain: "Code &middot; Matrix rain", snow: "Code &middot; Snow",
+    text: "Text source", blank: "Text &middot; blank board"
+  };
+  /* rects are % of the stage: l, t, w, h, z, f = flipped */
+  var DEFAULT_LAYOUTS = {
+    main: {
+      logo: { l:68, t:70, w:30, h:27, z:2 },
+      dog:  { l:50, t:77, w:19, h:21, z:3 }
+    },
+    code: {
+      rain: { l:9,  t:14, w:45, h:30, z:1 },
+      snow: { l:9,  t:52, w:45, h:32, z:1 },
+      logo: { l:67, t:6,  w:27, h:26, z:2 },
+      text: { l:68, t:38, w:27, h:52, z:2 }
+    },
+    background: {
+      logo: { l:3,  t:5,  w:45, h:48, z:1 },
+      dog:  { l:49, t:32, w:48, h:62, z:2, f:1 }
+    },
+    blank: {
+      blank: { l:15, t:30, w:70, h:40, z:1 }
+    }
+  };
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  var layouts = clone(DEFAULT_LAYOUTS);
+  var nodes = {};        /* id -> element, kept across scenes so they can glide */
+  var currentScene = null;
+  var selectedId = null;
+
+  function setRect(el, r, animate){
+    if (!animate) el.classList.add("no-anim");
+    el.style.left = r.l + "%";
+    el.style.top = r.t + "%";
+    el.style.width = r.w + "%";
+    el.style.height = r.h + "%";
+    el.style.zIndex = r.z || 1;
+    /* flip touches only the content, so the tag and handle stay readable */
+    var fill = el.querySelector(".fill");
+    if (fill) fill.style.transform = r.f ? "scaleX(-1)" : "scaleX(1)";
+    if (!animate){ void el.offsetWidth; el.classList.remove("no-anim"); }
+  }
+  function makeNode(id){
+    var el = document.createElement("div");
+    el.className = "src-node";
+    el.setAttribute("data-src", id);
+    el.innerHTML = '<span class="src-tag">' + (nodeTags[id] || id) + '</span>' +
+                   nodeFill(id) +
+                   '<span class="src-handle" aria-hidden="true"></span>';
+    nodes[id] = el;
+    return el;
+  }
+  function selectNode(id){
+    selectedId = id;
+    Object.keys(nodes).forEach(function(k){
+      nodes[k].classList.toggle("is-selected", k === id);
+    });
+  }
+
+  /* ----- code source effects ----- */
+  var rainTimer = null, snowTimer = null, fxTimer = null;
+  function stopEffects(){
+    if (rainTimer){ clearInterval(rainTimer); rainTimer = null; }
+    if (snowTimer){ clearInterval(snowTimer); snowTimer = null; }
+    if (fxTimer){ clearTimeout(fxTimer); fxTimer = null; }
+  }
   function startRain(){
     var c = document.getElementById("rainCanvas");
-    if (!c) return;
+    if (!c || !c.offsetWidth) return;
     var ctx = c.getContext("2d");
-    function size(){ c.width = c.offsetWidth; c.height = c.offsetHeight; }
-    size();
+    c.width = c.offsetWidth; c.height = c.offsetHeight;
     var letters = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
     var fs = 10, cols = Math.max(8, Math.floor(c.width / fs));
     var rows = Math.max(10, Math.floor(c.height / fs));
@@ -845,39 +986,9 @@
     if (reduced){ draw(); return; }
     rainTimer = setInterval(draw, 33);
   }
-  function dogVideo(style, label){
-    return '<video class="layer" src="' + DOG + '" poster="' + POSTER + '" ' +
-      (reduced ? 'controls ' : 'autoplay ') +
-      'muted loop playsinline style="' + style + '" aria-label="' + label + '"></video>';
-  }
-  function renderScene(name){
-    stopRain();
-    var html = "";
-    if (name === "main"){
-      html = '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo" style="right:2%;bottom:3%;width:30%;height:27%">' +
-             dogVideo("right:31%;bottom:2%;width:19%;height:21%", "Dog video playing on the Main Scene");
-    } else if (name === "code"){
-      html = '<div class="layer codebox" style="left:9%;top:14%;width:45%;height:30%"><canvas id="rainCanvas" aria-label="Matrix rain code effect"></canvas></div>' +
-             '<div class="layer codebox" style="left:9%;top:52%;width:45%;height:32%"><canvas id="snowCanvas" aria-label="Falling snow code effect"></canvas></div>' +
-             '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo, small" style="right:6%;top:6%;width:27%;height:26%">' +
-             '<div class="layer txtbox" style="right:5%;top:38%;width:27%;height:52%">A dynamic canvas application to create and manage scenes with various media sources like images, videos, text, and browser iframes.</div>';
-    } else if (name === "background"){
-      html = dogVideo("right:3%;top:32%;width:48%;height:62%;transform:scaleX(-1)", "Dog video, large, on the Background Scene") +
-             '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo, large" style="left:3%;top:5%;width:45%;height:48%">';
-    } else {
-      html = '<div class="layer blank-note"><span>Nothing here yet.</span><span style="font-size:.62em;color:var(--chalk-dim)">That is the point of a blank board.</span></div>';
-    }
-    stage.innerHTML = html;
-    cap.innerHTML = captions[name];
-    if (name === "code"){ startRain(); startSnow(); }
-    if (!reduced){
-      stage.querySelectorAll("video").forEach(function(v){ var p = v.play(); if (p && p.catch) p.catch(function(){}); });
-    }
-  }
-  var snowTimer = null;
   function startSnow(){
     var c = document.getElementById("snowCanvas");
-    if (!c) return;
+    if (!c || !c.offsetWidth) return;
     var ctx = c.getContext("2d");
     c.width = c.offsetWidth; c.height = c.offsetHeight;
     var parts = [];
@@ -892,29 +1003,154 @@
     }
     if (reduced){ draw(); return; }
     snowTimer = setInterval(draw, 33);
-    var oldStop = stopRain;
-    stopRain = function(){ if (rainTimer){ clearInterval(rainTimer); rainTimer = null; } if (snowTimer){ clearInterval(snowTimer); snowTimer = null; } stopRain = oldStop; };
   }
+  function scheduleEffects(){
+    if (currentScene !== "code") return;
+    if (reduced){ startRain(); startSnow(); return; }
+    /* wait for the Move glide to land so the canvases size to their final box */
+    fxTimer = setTimeout(function(){
+      if (currentScene === "code"){ startRain(); startSnow(); }
+    }, 680);
+  }
+
+  /* ----- scene switching, with the Move transition ----- */
+  function renderScene(name, animate){
+    stopEffects();
+    var target = layouts[name];
+    var first = !currentScene;
+    currentScene = name;
+    /* sources leaving this scene fade out, then leave the stage */
+    Object.keys(nodes).forEach(function(id){
+      var el = nodes[id];
+      if (!el.parentNode) return;
+      if (!target[id]){
+        if (selectedId === id) selectNode(null);
+        el.classList.add("no-anim");
+        el.style.opacity = "0";
+        setTimeout(function(){
+          if (el.parentNode && !(layouts[currentScene] || {})[id]) el.parentNode.removeChild(el);
+        }, 380);
+      }
+    });
+    /* sources in this scene: shared ones glide, new ones fade in */
+    Object.keys(target).forEach(function(id){
+      var r = target[id];
+      var el = nodes[id] || makeNode(id);
+      if (el.parentNode){
+        el.classList.remove("no-anim");
+        el.style.opacity = "1";
+        setRect(el, r, animate && !reduced);
+      } else {
+        setRect(el, r, false);
+        el.style.opacity = "0";
+        stage.appendChild(el);
+        void el.offsetWidth;
+        el.style.opacity = "1";
+      }
+    });
+    if (selectedId && !target[selectedId]) selectNode(null);
+    if (first){
+      cap.innerHTML = captions[name];
+    } else {
+      cap.classList.add("is-switching");
+      setTimeout(function(){
+        cap.innerHTML = captions[name];
+        cap.classList.remove("is-switching");
+      }, 180);
+    }
+    scheduleEffects();
+  }
+
+  /* ----- drag to move, corner pull to scale ----- */
+  var drag = null;
+  function stageRect(){ return stage.getBoundingClientRect(); }
+  stage.addEventListener("pointerdown", function(e){
+    var nodeEl = e.target.closest ? e.target.closest(".src-node") : null;
+    if (!nodeEl){
+      selectNode(null);
+      return;
+    }
+    var id = nodeEl.getAttribute("data-src");
+    if (!layouts[currentScene] || !layouts[currentScene][id]) return;
+    selectNode(id);
+    var sr = stageRect();
+    var r = layouts[currentScene][id];
+    var isHandle = !!(e.target.closest && e.target.closest(".src-handle"));
+    drag = {
+      id: id, el: nodeEl, mode: isHandle ? "scale" : "move",
+      startX: e.clientX, startY: e.clientY,
+      sw: sr.width, sh: sr.height,
+      l: r.l * sr.width / 100, t: r.t * sr.height / 100,
+      w: r.w * sr.width / 100, h: r.h * sr.height / 100,
+      cur: { l: r.l, t: r.t, w: r.w, h: r.h, z: r.z, f: r.f }
+    };
+    nodeEl.classList.add(isHandle ? "is-scaling" : "is-dragging");
+    if (nodeEl.setPointerCapture) nodeEl.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  stage.addEventListener("pointermove", function(e){
+    if (!drag) return;
+    var dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+    var r = drag.cur;
+    if (drag.mode === "move"){
+      var nl = drag.l + dx, nt = drag.t + dy;
+      nl = Math.max(-drag.w + 44, Math.min(drag.sw - 44, nl));
+      nt = Math.max(-drag.h + 36, Math.min(drag.sh - 26, nt));
+      r.l = nl / drag.sw * 100;
+      r.t = nt / drag.sh * 100;
+    } else {
+      var nw = Math.max(46, Math.min(drag.sw * 1.25, drag.w + dx));
+      r.w = nw / drag.sw * 100;
+      r.h = (nw * (drag.h / drag.w)) / drag.sh * 100;
+    }
+    drag.el.style.left = r.l + "%";
+    drag.el.style.top = r.t + "%";
+    drag.el.style.width = r.w + "%";
+    drag.el.style.height = r.h + "%";
+  });
+  function endDrag(){
+    if (!drag) return;
+    var r = layouts[currentScene] && layouts[currentScene][drag.id];
+    if (r){ r.l = drag.cur.l; r.t = drag.cur.t; r.w = drag.cur.w; r.h = drag.cur.h; }
+    drag.el.classList.remove("is-dragging", "is-scaling");
+    drag = null;
+    if (currentScene === "code"){ stopEffects(); scheduleEffects(); }
+  }
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  /* keyboard: arrows nudge the selected source, + / - scale it */
+  document.addEventListener("keydown", function(e){
+    if (!selectedId || !layouts[currentScene] || !layouts[currentScene][selectedId]) return;
+    if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+    var r = layouts[currentScene][selectedId];
+    var el = nodes[selectedId];
+    var step = e.shiftKey ? 4 : 1;
+    var used = true;
+    if (e.key === "ArrowLeft") r.l -= step;
+    else if (e.key === "ArrowRight") r.l += step;
+    else if (e.key === "ArrowUp") r.t -= step;
+    else if (e.key === "ArrowDown") r.t += step;
+    else if (e.key === "+" || e.key === "="){ var nw = r.w * 1.08; r.h = r.h * (nw / r.w); r.w = nw; }
+    else if (e.key === "-" || e.key === "_"){ var nw2 = Math.max(6, r.w * .92); r.h = r.h * (nw2 / r.w); r.w = nw2; }
+    else used = false;
+    if (used){ e.preventDefault(); if (el) setRect(el, r, false); }
+  });
+
   document.querySelectorAll(".scene-tab").forEach(function(tab){
     tab.addEventListener("click", function(){
       if (tab.getAttribute("aria-selected") === "true") return;
       document.querySelectorAll(".scene-tab").forEach(function(t){ t.setAttribute("aria-selected","false"); });
       tab.setAttribute("aria-selected","true");
-      if (reduced){
-        renderScene(tab.getAttribute("data-scene"));
-        return;
-      }
-      stage.classList.add("is-switching");
-      cap.classList.add("is-switching");
-      setTimeout(function(){
-        renderScene(tab.getAttribute("data-scene"));
-        void stage.offsetWidth;
-        stage.classList.remove("is-switching");
-        cap.classList.remove("is-switching");
-      }, 200);
+      renderScene(tab.getAttribute("data-scene"), true);
     });
   });
-  renderScene("main");
+  document.getElementById("resetLayout").addEventListener("click", function(){
+    if (!currentScene) return;
+    layouts[currentScene] = clone(DEFAULT_LAYOUTS[currentScene]);
+    renderScene(currentScene, true);
+  });
+  renderScene("main", false);
 
   /* ---------- demo modal ---------- */
   var modal = document.getElementById("demoModal");
