@@ -124,7 +124,7 @@
   }
   .chalk-frame::before{ top:-8px; left:26px; transform:rotate(-5deg); }
   .chalk-frame::after{ top:-8px; right:26px; transform:rotate(4deg); }
-  .chalk-frame video{ display:block; width:100%; height:auto; }
+  .chalk-frame video, .chalk-frame img{ display:block; width:100%; height:auto; }
   .frame-cap{
     display:flex; align-items:center; gap:10px; padding:10px 14px;
     background:rgba(16,20,23,.88); color:var(--chalk-dim); font-size:1rem;
@@ -313,14 +313,14 @@
   .open-panel p{ color:var(--chalk-dim); max-width:38rem; margin:10px auto 0; font-size:clamp(.92rem, 2.5vw, 1.08rem); }
   .open-panel .hero-cta{ justify-content:center; }
   .open-panel .mini-dog{ width:130px; margin:0 auto 6px; border-radius:8px; overflow:hidden; border:1px solid var(--panel-line); }
-  .open-panel .mini-dog video{ width:100%; display:block; }
+  .open-panel .mini-dog img{ width:100%; display:block; }
 
   /* ---------- footer ---------- */
   footer{ margin-top:36px; border-top:3px solid var(--wood); background:rgba(20,24,28,.94); }
   .foot-in{ max-width:1120px; margin:0 auto; padding:22px 20px 20px; }
   .foot-grid{ display:grid; grid-template-columns:300px 1fr; gap:30px; align-items:start; }
   .dog-box{ position:relative; }
-  .dog-box .chalk-frame video{ aspect-ratio:688/464; object-fit:cover; }
+  .dog-box .chalk-frame img{ aspect-ratio:688/464; object-fit:cover; }
   .dog-note{
     position:absolute; inset:auto 10px 10px 10px; z-index:5;
     background:#fdfbef; color:#2c2c26; border-radius:4px; padding:12px 14px;
@@ -505,8 +505,8 @@
       </div>
       <figure style="margin:0 auto">
         <div class="chalk-frame">
-          <video id="heroDog" src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="Chalk animation of a dachshund walking on a chalkboard"></video>
-          <figcaption class="frame-cap"><span class="star" aria-hidden="true">&#9733;</span> This chalk pup is the demo video that ships inside the app, drawn right on the board.</figcaption>
+          <img id="heroDog" class="dog-gif" src="assets/chalk-dog.gif" alt="Chalk animation of a dachshund walking on a chalkboard" />
+          <figcaption class="frame-cap"><span class="star" aria-hidden="true">&#9733;</span> This chalk pup is the demo clip that ships inside the app, drawn right on the board.</figcaption>
         </div>
       </figure>
     </div>
@@ -698,7 +698,7 @@
   <!-- OPEN APP -->
   <section class="wrap" aria-labelledby="open-h">
     <div class="open-panel">
-      <div class="mini-dog"><video src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund, animated"></video></div>
+      <div class="mini-dog"><img class="dog-gif" src="assets/chalk-dog.gif" alt="The chalk dachshund, animated" /></div>
       <h2 id="open-h">The board is waiting</h2>
       <p>No download and no install. Open the live app, keep the demo scenes or wipe the board clean, and make something worth framing.</p>
       <div class="hero-cta">
@@ -716,7 +716,7 @@
     <div class="foot-grid">
       <div class="dog-box">
         <div class="chalk-frame">
-          <video id="footDog" src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund walking on the chalkboard"></video>
+          <img id="footDog" class="dog-gif" src="assets/chalk-dog.gif" alt="The chalk dachshund walking on the chalkboard" />
         </div>
         <div class="dog-note" id="dogNote" role="status">
           <button class="close-note" type="button" id="noteClose" aria-label="Close note">&times;</button>
@@ -769,6 +769,9 @@
   if (reduced) {
     document.querySelectorAll("video[autoplay]").forEach(function(v){
       v.removeAttribute("autoplay"); v.pause(); v.setAttribute("controls","");
+    });
+    document.querySelectorAll("img.dog-gif").forEach(function(g){
+      g.src = "assets/chalk-dog-poster.jpg";
     });
   }
 
