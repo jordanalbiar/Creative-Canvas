@@ -1,3 +1,5 @@
+![Creative Canvas Studio cover](assets/creative-canvas-cover.png)
+
 # Creative Canvas Studio
 
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
