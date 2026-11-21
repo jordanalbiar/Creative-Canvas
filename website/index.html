@@ -12,6 +12,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
 <style>
   :root{
+    --panel:#22272c;
+    --panel-2:#262b31;
+    --panel-line:#3a4148;
+    --panel-ink:#e8e6df;
     --board:#20262b;
     --board-deep:#171c20;
     --chalk:#f5f1e3;
@@ -29,18 +33,20 @@
     --ease-pop:cubic-bezier(.2,.8,.25,1);
   }
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:smooth; font-size:clamp(14px, .55vw + 12.5px, 16.5px); }
+  html, body{ overflow-x:clip; }
   section, .card{ scroll-margin-top:84px; }
   body{
     margin:0;
     color:var(--chalk);
     font-family:"Patrick Hand", "Segoe Print", cursive;
-    font-size:1.06rem;
-    line-height:1.55;
+    font-size:clamp(.92rem, .85rem + .35vw, 1.06rem);
+    line-height:1.5;
     background-color:var(--board-deep);
     background-image:url(assets/chalkboard.jpg);
     background-size:768px 576px;
-    background-attachment:fixed;
+    background-repeat:repeat;
+    background-attachment:scroll;
   }
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -52,20 +58,20 @@
   button, a.btn, .navlink, summary{ min-height:2.5rem; }
   :focus-visible{ outline:3px dashed var(--yellow); outline-offset:3px; border-radius:6px; }
 
-  .wrap{ max-width:1120px; margin:0 auto; padding-left:20px; padding-right:20px; }
+  .wrap{ max-width:1120px; margin:0 auto; padding-left:16px; padding-right:16px; }
 
   /* ---------- top bar ---------- */
   header.sitebar{
     position:sticky; top:0; z-index:40;
-    background:rgba(23,28,32,.92);
+    background:#1e2328;
     backdrop-filter:blur(6px);
-    border-bottom:3px solid var(--wood);
-    box-shadow:0 2px 0 var(--wood-dark), 0 10px 24px rgba(0,0,0,.35);
+    border-bottom:1px solid var(--panel-line);
+    box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 10px 24px rgba(0,0,0,.35);
   }
-  .bar-in{ display:flex; align-items:center; gap:14px; padding:8px 20px; max-width:1120px; margin:0 auto; flex-wrap:wrap; }
+  .bar-in{ display:flex; align-items:center; gap:10px; padding:6px 16px; max-width:1120px; margin:0 auto; flex-wrap:wrap; }
   .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--chalk); min-height:2.5rem; }
-  .brand img{ height:44px; width:auto; display:block; }
-  .brand span{ font-family:"Caveat",cursive; font-size:1.55rem; font-weight:700; }
+  .brand img{ height:36px; width:auto; display:block; }
+  .brand span{ font-family:"Caveat",cursive; font-size:clamp(1.2rem, 3vw, 1.5rem); font-weight:700; }
   nav.mainnav{ display:flex; gap:2px; flex-wrap:wrap; margin-left:auto; }
   .navlink{
     display:inline-flex; align-items:center; padding:6px 12px; position:relative;
@@ -81,8 +87,8 @@
   .navlink:hover::after{ transform:scaleX(1); }
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:9px 20px; border-radius:10px; text-decoration:none; cursor:pointer;
-    font-family:"Patrick Hand",cursive; font-size:1.08rem; border:2px dashed transparent;
+    padding:8px 16px; border-radius:8px; text-decoration:none; cursor:pointer;
+    font-family:"Patrick Hand",cursive; font-size:clamp(.92rem, 2.4vw, 1.05rem); border:2px dashed transparent;
     transition:transform .22s var(--ease-pop), background .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease;
   }
   .btn:hover{ transform:translateY(-2px); }
@@ -96,15 +102,15 @@
   .btn-small{ padding:6px 14px; font-size:1rem; }
 
   /* ---------- hero ---------- */
-  .hero{ padding-top:34px; padding-bottom:16px; }
-  .hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:38px; align-items:center; }
-  .hero-logo{ width:min(350px, 80%); height:auto; display:block; margin-bottom:8px; }
-  .hero h1{ font-size:clamp(2.3rem, 5.4vw, 3.6rem); }
+  .hero{ padding-top:20px; padding-bottom:10px; }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center; }
+  .hero-logo{ width:min(300px, 72%); height:auto; display:block; margin-bottom:6px; }
+  .hero h1{ font-size:clamp(1.75rem, 5vw, 3.4rem); }
   .hero h1 .u-yellow{ color:var(--yellow); }
-  .hero p.lede{ font-size:1.22rem; color:var(--chalk-dim); max-width:34rem; margin:16px 0 6px; }
+  .hero p.lede{ font-size:clamp(1rem, 2.6vw, 1.2rem); color:var(--chalk-dim); max-width:34rem; margin:12px 0 4px; }
   .hero p.lede strong{ color:var(--chalk); font-weight:400; text-decoration:underline dashed var(--pink) 2px; text-underline-offset:5px; }
-  .hero-cta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
-  .hero-note{ margin-top:16px; color:var(--chalk-faint); font-size:.98rem; }
+  .hero-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .hero-note{ margin-top:12px; color:var(--chalk-faint); font-size:clamp(.85rem, 2.2vw, .96rem); }
   .squiggle{ display:block; margin-top:14px; }
 
   .chalk-frame{
@@ -125,16 +131,53 @@
   }
   .frame-cap .star{ color:var(--yellow); font-size:1.2rem; }
 
+  /* ---------- studio dock: the app's own panels, as a strip ---------- */
+  .studio-dock{
+    display:flex; flex-wrap:wrap; gap:6px 8px; align-items:center;
+    margin-top:14px; padding:8px 10px;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+  }
+  .studio-dock .dock-title{ font-family:"Caveat",cursive; font-size:1.25rem; color:var(--yellow); margin-right:4px; white-space:nowrap; }
+  .dock-item{
+    display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px;
+    background:var(--panel-2); border:1px solid var(--panel-line);
+    font-size:.86rem; color:var(--panel-ink); white-space:nowrap;
+  }
+  .dock-item b{ color:var(--yellow); font-weight:400; }
+  .dock-item .sw{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+  .panel-head{
+    display:flex; align-items:center; gap:10px; margin:-16px -20px 12px; padding:8px 14px;
+    background:#1e2328; border-bottom:1px solid var(--panel-line); border-radius:10px 10px 0 0;
+    font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; color:var(--chalk-faint);
+  }
+  .panel-head .ph-dots{ display:inline-flex; gap:5px; }
+  .panel-head .ph-dots i{ width:9px; height:9px; border-radius:50%; background:#3a4148; display:block; }
+  .panel-head .ph-dots i:first-child{ background:var(--pink); }
+  .panel-head .ph-dots i:nth-child(2){ background:var(--yellow); }
+  .panel-head .ph-dots i:nth-child(3){ background:var(--green); }
+  .panel-head .ph-right{ margin-left:auto; letter-spacing:.02em; text-transform:none; color:var(--chalk-dim); }
+  .theme-strip{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:14px;
+    padding:9px 10px; background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+  }
+  .theme-strip .theme-label{ font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; color:var(--chalk-faint); margin-right:2px; }
+  .theme-chip{
+    display:inline-flex; align-items:center; gap:6px; padding:3px 10px 3px 4px; border-radius:999px;
+    background:var(--panel-2); border:1px solid var(--panel-line); font-size:.84rem; color:var(--panel-ink);
+  }
+  .theme-chip .sw{ width:16px; height:16px; border-radius:50%; border:1px solid rgba(255,255,255,.35); display:inline-block; }
+
   /* ---------- at-a-glance outline ---------- */
   .glance{
-    margin-top:6px; border:2px dashed rgba(245,241,227,.45); border-radius:12px;
-    background:rgba(255,255,255,.04); padding:16px 20px 14px;
+    margin-top:6px; border:1px solid var(--panel-line); border-radius:12px;
+    background:var(--panel); padding:16px 20px 12px; box-shadow:0 4px 14px rgba(0,0,0,.3);
   }
-  .glance h2{ font-size:1.9rem; }
+  .glance h2{ font-size:clamp(1.45rem, 4vw, 1.85rem); }
   .glance h2 span{ color:var(--yellow); }
-  .glance .glance-sub{ color:var(--chalk-dim); margin:2px 0 12px; font-size:1rem; }
-  .glance-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px 28px; }
-  .glance-group h3{ font-size:1.4rem; margin-bottom:4px; }
+  .glance .glance-sub{ color:var(--chalk-dim); margin:2px 0 10px; font-size:clamp(.88rem, 2.4vw, .98rem); }
+  .glance-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:6px 24px; }
+  .glance-group h3{ font-size:clamp(1.15rem, 3vw, 1.35rem); margin-bottom:2px; }
   .glance-group ul{ list-style:none; margin:0; padding:0; }
   .glance-group li{ line-height:1.35; }
   .glance-group a{
@@ -147,19 +190,19 @@
   .glance-group a:hover::before{ transform:translateX(2px); }
 
   /* ---------- sections ---------- */
-  section{ padding-top:28px; padding-bottom:6px; }
+  section{ padding-top:20px; padding-bottom:4px; }
   .sec-head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:6px; }
-  .sec-head h2{ font-size:clamp(1.9rem, 4.2vw, 2.7rem); }
-  .sec-head .tag{ color:var(--yellow); font-family:"Caveat",cursive; font-size:1.5rem; transform:rotate(-2deg); }
-  .sec-sub{ color:var(--chalk-dim); max-width:44rem; margin:0 0 12px; font-size:1.05rem; }
+  .sec-head h2{ font-size:clamp(1.55rem, 4vw, 2.5rem); }
+  .sec-head .tag{ color:var(--yellow); font-family:"Caveat",cursive; font-size:clamp(1.15rem, 3vw, 1.45rem); transform:rotate(-2deg); }
+  .sec-sub{ color:var(--chalk-dim); max-width:44rem; margin:0 0 10px; font-size:clamp(.9rem, 2.4vw, 1.02rem); }
   .chalk-rule{ border:none; border-top:3px dashed rgba(245,241,227,.35); margin:18px 0 0; }
 
-  .group-title{ font-size:1.6rem; margin:16px 0 8px; display:flex; align-items:center; gap:12px; }
+  .group-title{ font-size:clamp(1.25rem, 3.4vw, 1.55rem); margin:12px 0 6px; display:flex; align-items:center; gap:10px; }
   .group-title .dot{ width:14px; height:14px; border-radius:50%; border:3px solid var(--chalk); display:inline-block; }
   .cards{ display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
   .card{
-    background:var(--card); border:2px dashed rgba(245,241,227,.4); border-radius:12px;
-    padding:12px 14px 10px; position:relative;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    padding:10px 12px 9px; position:relative; box-shadow:0 3px 10px rgba(0,0,0,.25);
     transition:border-color .25s ease, box-shadow .25s ease;
   }
   .card:hover{ border-color:rgba(245,241,227,.75); box-shadow:0 6px 18px rgba(0,0,0,.35); }
@@ -170,8 +213,8 @@
   }
   .card:nth-child(3n+2){ transform:rotate(-.4deg); }
   .card:nth-child(3n){ transform:rotate(.35deg); }
-  .card h3{ font-size:1.35rem; margin-bottom:2px; }
-  .card p{ margin:0; color:var(--chalk-dim); font-size:.95rem; line-height:1.45; }
+  .card h3{ font-size:clamp(1.05rem, 2.8vw, 1.3rem); margin-bottom:2px; }
+  .card p{ margin:0; color:var(--chalk-dim); font-size:clamp(.84rem, 2.3vw, .94rem); line-height:1.42; }
   .c-yellow h3{ color:var(--yellow); } .c-pink h3{ color:var(--pink); }
   .c-blue h3{ color:var(--blue); } .c-green h3{ color:var(--green); }
   .c-orange h3{ color:var(--orange); } .c-white h3{ color:var(--chalk); }
@@ -179,25 +222,25 @@
   /* ---------- sources ---------- */
   .src-grid{ display:grid; grid-template-columns:repeat(7, 1fr); gap:10px; }
   .src-tile{
-    background:rgba(255,255,255,.05); border:2px solid rgba(245,241,227,.35); border-radius:10px;
-    padding:10px 6px 8px; text-align:center;
+    background:var(--panel-2); border:1px solid var(--panel-line); border-left:3px solid var(--yellow); border-radius:8px;
+    padding:9px 6px 7px; text-align:center; box-shadow:0 3px 10px rgba(0,0,0,.25);
     transition:transform .25s var(--ease-pop), border-color .25s ease, background .25s ease;
   }
   .src-tile:hover{ transform:translateY(-3px); border-color:var(--yellow); background:rgba(255,255,255,.08); }
-  .src-tile .ico{ font-size:1.7rem; display:block; line-height:1.2; filter:grayscale(.15); }
-  .src-tile .lbl{ display:block; margin-top:5px; font-size:.98rem; color:var(--chalk); }
-  .src-tile .hint{ display:block; font-size:.8rem; color:var(--chalk-faint); line-height:1.3; margin-top:2px; }
+  .src-tile .ico{ font-size:clamp(1.25rem, 3.4vw, 1.6rem); display:block; line-height:1.2; filter:grayscale(.15); }
+  .src-tile .lbl{ display:block; margin-top:4px; font-size:clamp(.84rem, 2.4vw, .96rem); color:var(--chalk); }
+  .src-tile .hint{ display:block; font-size:.78rem; color:var(--chalk-faint); line-height:1.3; margin-top:2px; }
 
   /* ---------- scene stage ---------- */
   .scene-tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
   .scene-tab{
-    font-family:"Patrick Hand",cursive; font-size:1.05rem; cursor:pointer;
-    background:transparent; color:var(--chalk-dim); border:2px dashed rgba(245,241,227,.4);
-    border-radius:10px; padding:8px 16px; min-height:2.75rem;
+    font-family:"Patrick Hand",cursive; font-size:clamp(.92rem, 2.5vw, 1.02rem); cursor:pointer;
+    background:var(--panel); color:var(--chalk-dim); border:1px solid var(--panel-line);
+    border-radius:8px; padding:7px 14px; min-height:2.5rem;
     transition:color .22s ease, background .22s ease, border-color .22s ease, transform .22s var(--ease-pop);
   }
   .scene-tab:hover{ color:var(--chalk); border-color:var(--chalk); transform:translateY(-2px); }
-  .scene-tab[aria-selected="true"]{ background:var(--chalk); color:#23282c; border-color:var(--chalk); border-style:solid; }
+  .scene-tab[aria-selected="true"]{ background:var(--chalk); color:#23282c; border-color:var(--chalk); }
   .stage{
     position:relative; aspect-ratio:16/9; border:3px solid rgba(245,241,227,.85); border-radius:6px;
     overflow:hidden; background:#0c0f12 url(assets/chalkboard.jpg) center/cover;
@@ -217,14 +260,14 @@
     inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
     color:var(--chalk-faint); font-family:"Caveat",cursive; font-size:clamp(1.4rem,3.4vw,2.2rem); text-align:center; padding:20px;
   }
-  .stage-cap{ margin-top:12px; color:var(--chalk-dim); font-size:1.05rem; max-width:46rem; transition:opacity .28s ease, transform .28s var(--ease-pop); }
+  .stage-cap{ margin-top:10px; color:var(--chalk-dim); font-size:clamp(.9rem, 2.4vw, 1.02rem); max-width:46rem; transition:opacity .28s ease, transform .28s var(--ease-pop); }
   .stage-cap.is-switching{ opacity:0; transform:translateY(4px); }
   .stage-cap strong{ color:var(--yellow); font-weight:400; }
 
   /* ---------- steps ---------- */
-  .steps{ display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; counter-reset:step; }
+  .steps{ display:grid; grid-template-columns:repeat(5, 1fr); gap:9px; counter-reset:step; }
   .step{
-    background:var(--card); border:2px dashed rgba(245,241,227,.4); border-radius:12px; padding:12px 12px 9px;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px; padding:10px 11px 8px;
     transition:border-color .25s ease, box-shadow .25s ease, transform .25s var(--ease-pop);
   }
   .step:hover{ border-color:rgba(245,241,227,.75); box-shadow:0 6px 18px rgba(0,0,0,.35); transform:translateY(-3px); }
@@ -233,13 +276,13 @@
     display:flex; align-items:center; justify-content:center; font-family:"Caveat",cursive;
     font-size:1.4rem; color:var(--yellow); margin-bottom:6px;
   }
-  .step h3{ font-size:1.35rem; margin-bottom:2px; }
-  .step p{ margin:0; color:var(--chalk-dim); font-size:.95rem; line-height:1.45; }
+  .step h3{ font-size:clamp(1.05rem, 2.8vw, 1.3rem); margin-bottom:2px; }
+  .step p{ margin:0; color:var(--chalk-dim); font-size:clamp(.84rem, 2.3vw, .94rem); line-height:1.42; }
 
   /* ---------- tips / faq ---------- */
   .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start; }
   .tip{ border-left:4px solid var(--green); padding:4px 0 4px 16px; margin-bottom:12px; }
-  .tip h3{ font-size:1.5rem; color:var(--green); }
+  .tip h3{ font-size:clamp(1.2rem, 3.2vw, 1.45rem); color:var(--green); }
   .tip p{ margin:4px 0 0; color:var(--chalk-dim); }
   details.faq{
     border:2px dashed rgba(245,241,227,.35); border-radius:10px; margin-bottom:8px;
@@ -248,7 +291,7 @@
   }
   details.faq[open ]{ border-color:rgba(245,241,227,.6); background:rgba(255,255,255,.06); }
   details.faq summary{
-    cursor:pointer; font-family:"Caveat",cursive; font-size:1.45rem; font-weight:600;
+    cursor:pointer; font-family:"Caveat",cursive; font-size:clamp(1.2rem, 3.2vw, 1.42rem); font-weight:600;
     display:flex; align-items:center; padding:8px 0; list-style:none; color:var(--chalk);
   }
   details.faq summary::-webkit-details-marker{ display:none; }
@@ -263,22 +306,22 @@
 
   /* ---------- open app panel ---------- */
   .open-panel{
-    border:3px solid rgba(245,241,227,.85); border-radius:8px; padding:20px 22px;
-    background:rgba(16,20,23,.72); text-align:center; position:relative; overflow:hidden;
+    border:1px solid var(--panel-line); border-radius:10px; padding:16px 18px;
+    background:var(--panel); text-align:center; position:relative; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,.3);
   }
-  .open-panel h2{ font-size:clamp(2.1rem, 5vw, 3.2rem); }
-  .open-panel p{ color:var(--chalk-dim); max-width:38rem; margin:12px auto 0; font-size:1.12rem; }
+  .open-panel h2{ font-size:clamp(1.6rem, 5vw, 3rem); }
+  .open-panel p{ color:var(--chalk-dim); max-width:38rem; margin:10px auto 0; font-size:clamp(.92rem, 2.5vw, 1.08rem); }
   .open-panel .hero-cta{ justify-content:center; }
-  .open-panel .mini-dog{ width:150px; margin:0 auto 6px; border-radius:8px; overflow:hidden; border:2px dashed rgba(245,241,227,.5); }
+  .open-panel .mini-dog{ width:130px; margin:0 auto 6px; border-radius:8px; overflow:hidden; border:1px solid var(--panel-line); }
   .open-panel .mini-dog video{ width:100%; display:block; }
 
   /* ---------- footer ---------- */
   footer{ margin-top:36px; border-top:3px solid var(--wood); background:rgba(20,24,28,.94); }
   .foot-in{ max-width:1120px; margin:0 auto; padding:22px 20px 20px; }
   .foot-grid{ display:grid; grid-template-columns:300px 1fr; gap:30px; align-items:start; }
-  .mascot-box{ position:relative; }
-  .mascot-box .chalk-frame video{ aspect-ratio:688/464; object-fit:cover; }
-  .mascot-note{
+  .dog-box{ position:relative; }
+  .dog-box .chalk-frame video{ aspect-ratio:688/464; object-fit:cover; }
+  .dog-note{
     position:absolute; inset:auto 10px 10px 10px; z-index:5;
     background:#fdfbef; color:#2c2c26; border-radius:4px; padding:12px 14px;
     box-shadow:4px 6px 16px rgba(0,0,0,.5);
@@ -287,20 +330,20 @@
     transform:rotate(-1.2deg) translateY(12px) scale(.95); transform-origin:bottom center;
     transition:opacity .3s ease, transform .3s var(--ease-pop), visibility 0s linear .3s;
   }
-  .mascot-note.open{
+  .dog-note.open{
     opacity:1; visibility:visible; pointer-events:auto;
     transform:rotate(-1.2deg) translateY(0) scale(1);
     transition:opacity .3s ease, transform .3s var(--ease-pop), visibility 0s;
   }
-  .mascot-note.swap{ animation:noteSwap .3s var(--ease-pop); }
+  .dog-note.swap{ animation:noteSwap .3s var(--ease-pop); }
   @keyframes noteSwap{
     0%{ opacity:.35; transform:rotate(-1.2deg) translateY(5px) scale(.98); }
     100%{ opacity:1; transform:rotate(-1.2deg) translateY(0) scale(1); }
   }
-  .mascot-note h3{ font-size:1.4rem; color:#2c2c26; margin-bottom:2px; }
-  .mascot-note p{ margin:0; }
-  .mascot-note a{ color:#1c5d8f; }
-  .mascot-note .close-note{
+  .dog-note h3{ font-size:1.4rem; color:#2c2c26; margin-bottom:2px; }
+  .dog-note p{ margin:0; }
+  .dog-note a{ color:#1c5d8f; }
+  .dog-note .close-note{
     position:absolute; top:2px; right:6px; background:none; border:none; cursor:pointer;
     font-size:1.3rem; color:#6b6b5e; min-width:2.25rem;
   }
@@ -313,7 +356,7 @@
   }
   .chip:hover{ border-color:var(--yellow); color:var(--yellow); transform:translateY(-2px); }
   .chip[aria-expanded="true"]{ background:var(--yellow); border-color:var(--yellow); color:#2b2110; border-style:solid; }
-  .foot-links h3{ font-size:1.7rem; margin-bottom:8px; }
+  .foot-links h3{ font-size:clamp(1.3rem, 3.6vw, 1.65rem); margin-bottom:6px; }
   .foot-links p{ color:var(--chalk-dim); margin:0 0 10px; max-width:36rem; }
   .foot-links ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 22px; }
   .foot-links li a{ display:inline-flex; align-items:center; min-height:2.25rem; text-decoration:none; }
@@ -351,23 +394,61 @@
   .modal-box iframe{ flex:1; width:100%; border:0; background:#0c0f12; }
 
   @media (max-width: 900px){
-    .hero-grid{ grid-template-columns:1fr; }
-    .glance-grid{ grid-template-columns:1fr; gap:4px 0; }
-    .glance-group ul{ display:grid; grid-template-columns:1fr 1fr; column-gap:18px; }
-    .cards{ grid-template-columns:1fr 1fr; }
-    .src-grid{ grid-template-columns:repeat(4, 1fr); }
-    .steps{ grid-template-columns:1fr 1fr; }
-    .two-col{ grid-template-columns:1fr; }
-    .foot-grid{ grid-template-columns:1fr; }
-    .mascot-box{ max-width:340px; }
+    .hero-grid{ grid-template-columns:1fr; gap:16px; }
+    .hero-logo{ width:min(230px, 58%); }
+    .glance-grid{ grid-template-columns:repeat(2, 1fr); gap:4px 20px; }
+    .cards{ grid-template-columns:1fr 1fr; gap:9px; }
+    .src-grid{ grid-template-columns:repeat(5, 1fr); gap:8px; }
+    .steps{ grid-template-columns:repeat(3, 1fr); }
+    .two-col{ grid-template-columns:1fr; gap:14px; }
+    .foot-grid{ grid-template-columns:1fr; gap:16px; }
+    .dog-box{ max-width:340px; }
   }
   @media (max-width: 560px){
-    .cards{ grid-template-columns:1fr; }
-    .glance-group ul{ grid-template-columns:1fr; }
-    .src-grid{ grid-template-columns:repeat(3, 1fr); }
-    .steps{ grid-template-columns:1fr; }
+    html{ font-size:14px; }
+    section, .card{ scroll-margin-top:164px; }
+    .wrap{ padding-left:12px; padding-right:12px; }
+    .bar-in{ padding:5px 10px; gap:6px; flex-wrap:wrap; }
+    .brand img{ height:30px; }
     .brand span{ display:none; }
-    .hero{ padding-top:26px; }
+    nav.mainnav{ flex-wrap:wrap; margin-left:auto; gap:2px; }
+    .navlink{ padding:5px 9px; font-size:.9rem; white-space:nowrap; }
+    .hero{ padding-top:14px; padding-bottom:6px; }
+    .hero-grid{ gap:12px; }
+    .hero-grid figure{ max-width:330px; width:100%; margin:0 auto; }
+    .hero-logo{ width:min(200px, 56%); margin-bottom:2px; }
+    .hero-cta{ gap:8px; margin-top:12px; }
+    .btn{ padding:7px 13px; }
+    .frame-cap{ padding:7px 10px; font-size:.86rem; }
+    .glance{ padding:12px 12px 10px; }
+    .panel-head{ margin:-12px -12px 10px; padding:6px 10px; }
+    .glance-grid{ grid-template-columns:1fr; gap:2px 0; }
+    .glance-group ul{ display:grid; grid-template-columns:1fr 1fr; column-gap:14px; }
+    .glance-group li{ line-height:1.3; }
+    .glance-group a{ min-height:1.7rem; font-size:.9rem; }
+    section{ padding-top:12px; }
+    .cards{ grid-template-columns:1fr 1fr; gap:8px; }
+    .card{ padding:8px 10px 7px; }
+    .card p{ line-height:1.35; }
+    .src-grid{ grid-template-columns:repeat(4, 1fr); gap:6px; }
+    .src-tile{ padding:7px 4px 6px; }
+    .src-tile .hint{ display:none; }
+    .steps{ grid-template-columns:1fr 1fr; gap:8px; }
+    .step .num{ width:28px; height:28px; font-size:1.2rem; margin-bottom:4px; }
+    .studio-dock{ margin-top:10px; padding:6px 8px; }
+    .dock-item{ font-size:.8rem; padding:2px 8px; }
+    .theme-chip{ font-size:.78rem; }
+    .open-panel{ padding:12px 12px; }
+    .open-panel .mini-dog{ width:104px; }
+    .foot-in{ padding:16px 12px 14px; }
+    .dog-box{ max-width:260px; }
+    .chips{ gap:6px; margin-top:10px; }
+    .chip{ font-size:.88rem; padding:5px 12px; min-height:2.25rem; }
+    .foot-base{ margin-top:16px; padding-top:12px; font-size:.86rem; }
+  }
+  @media (max-width: 380px){
+    .src-grid{ grid-template-columns:repeat(3, 1fr); }
+    .glance-group ul{ grid-template-columns:1fr; }
   }
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
@@ -396,6 +477,17 @@
 
 <main id="top">
 
+  <div class="wrap">
+    <div class="studio-dock" aria-label="Creative Canvas studio panels">
+      <span class="dock-title">Studio</span>
+      <span class="dock-item"><b>Scenes</b> 4: Main, Code, Background, Blank</span>
+      <span class="dock-item"><b>Sources</b> 14</span>
+      <span class="dock-item"><b>Canvas</b> 1920 x 1080, up to 4K</span>
+      <span class="dock-item"><span class="sw" style="background:#22272c;border:1px solid #5a636d"></span><b>Theme</b> Dark, 9 to pick</span>
+      <span class="dock-item"><b>Transitions</b> Fade, Move, Stinger</span>
+    </div>
+  </div>
+
   <!-- HERO -->
   <div class="hero wrap">
     <div class="hero-grid">
@@ -411,10 +503,10 @@
         <p class="hero-note">Free to use, runs entirely in your browser, and your projects export to a file you keep.</p>
         <svg class="squiggle" width="220" height="14" viewBox="0 0 220 14" aria-hidden="true"><path d="M3 9 C 30 2, 55 13, 82 7 S 140 3, 165 8 S 205 12, 217 6" fill="none" stroke="#ffa8c0" stroke-width="3.5" stroke-linecap="round" opacity=".85"/></svg>
       </div>
-      <figure style="margin:0">
+      <figure style="margin:0 auto">
         <div class="chalk-frame">
-          <video id="heroDog" src="assets/mascot-dog.mp4" poster="assets/mascot-poster.jpg" autoplay muted loop playsinline aria-label="Chalk animation of a dachshund walking on a chalkboard, the Creative Canvas mascot"></video>
-          <figcaption class="frame-cap"><span class="star" aria-hidden="true">&#9733;</span> Meet the mascot. This chalk pup is the demo video that ships inside the app, drawn right on the board.</figcaption>
+          <video id="heroDog" src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="Chalk animation of a dachshund walking on a chalkboard"></video>
+          <figcaption class="frame-cap"><span class="star" aria-hidden="true">&#9733;</span> This chalk pup is the demo video that ships inside the app, drawn right on the board.</figcaption>
         </div>
       </figure>
     </div>
@@ -423,6 +515,7 @@
   <!-- AT A GLANCE -->
   <section class="wrap" aria-labelledby="glance-h" style="padding-top:6px">
     <div class="glance" id="glance">
+      <div class="panel-head"><span class="ph-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Scene panel</span><span class="ph-right">18 features</span></div>
       <h2 id="glance-h">The whole toolbox, <span>at a glance</span></h2>
       <p class="glance-sub">All eighteen features on one board. Tap any line to jump straight to its card below.</p>
       <div class="glance-grid">
@@ -511,6 +604,18 @@
     </div>
     <p class="sec-sub">This is the Add Source panel from the app itself, chalked up the way it deserves. Every tile is a real source you can drop onto a scene.</p>
     <div class="src-grid" id="srcGrid"></div>
+    <div class="theme-strip" aria-label="Nine themes from the app">
+      <span class="theme-label">Themes</span>
+      <span class="theme-chip"><span class="sw" style="background:#f5f1e3"></span>Light</span>
+      <span class="theme-chip"><span class="sw" style="background:#22272c"></span>Dark</span>
+      <span class="theme-chip"><span class="sw" style="background:#8f1d2c"></span>Crimson</span>
+      <span class="theme-chip"><span class="sw" style="background:#8a939c"></span>Metallic</span>
+      <span class="theme-chip"><span class="sw" style="background:#a8d420"></span>Lime</span>
+      <span class="theme-chip"><span class="sw" style="background:#7b4fd0"></span>Purple</span>
+      <span class="theme-chip"><span class="sw" style="background:#ffd968"></span>Lemon</span>
+      <span class="theme-chip"><span class="sw" style="background:#c0c8d0"></span>Silverado</span>
+      <span class="theme-chip"><span class="sw" style="background:#ff8c42"></span>Orange</span>
+    </div>
     <hr class="chalk-rule" />
   </section>
 
@@ -520,7 +625,7 @@
       <h2 id="scenes-h">The demo scenes</h2>
       <span class="tag">already on the board when you arrive</span>
     </div>
-    <p class="sec-sub">The app opens with four scenes ready to explore. Flip through them here, rebuilt on this page from the app&rsquo;s own chalkboard, logo and mascot video, then open the real thing to play with the originals.</p>
+    <p class="sec-sub">The app opens with four scenes ready to explore. Flip through them here, rebuilt on this page from the app&rsquo;s own chalkboard, logo and chalk dog video, then open the real thing to play with the originals.</p>
     <div class="scene-tabs" role="tablist" aria-label="Demo scenes">
       <button class="scene-tab" role="tab" id="tab-main" aria-selected="true" aria-controls="stageBox" data-scene="main" type="button">Main Scene</button>
       <button class="scene-tab" role="tab" id="tab-code" aria-selected="false" aria-controls="stageBox" data-scene="code" type="button">Code Example</button>
@@ -593,7 +698,7 @@
   <!-- OPEN APP -->
   <section class="wrap" aria-labelledby="open-h">
     <div class="open-panel">
-      <div class="mini-dog"><video src="assets/mascot-dog.mp4" poster="assets/mascot-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund mascot, animated"></video></div>
+      <div class="mini-dog"><video src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund, animated"></video></div>
       <h2 id="open-h">The board is waiting</h2>
       <p>No download and no install. Open the live app, keep the demo scenes or wipe the board clean, and make something worth framing.</p>
       <div class="hero-cta">
@@ -609,16 +714,16 @@
 <footer>
   <div class="foot-in">
     <div class="foot-grid">
-      <div class="mascot-box">
+      <div class="dog-box">
         <div class="chalk-frame">
-          <video id="footDog" src="assets/mascot-dog.mp4" poster="assets/mascot-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund mascot walking on the chalkboard"></video>
+          <video id="footDog" src="assets/chalk-dog.mp4" poster="assets/chalk-dog-poster.jpg" autoplay muted loop playsinline aria-label="The chalk dachshund walking on the chalkboard"></video>
         </div>
-        <div class="mascot-note" id="mascotNote" role="status">
+        <div class="dog-note" id="dogNote" role="status">
           <button class="close-note" type="button" id="noteClose" aria-label="Close note">&times;</button>
           <h3 id="noteTitle"></h3>
           <p id="noteBody"></p>
         </div>
-        <div class="chips" role="group" aria-label="Notes from the mascot">
+        <div class="chips" role="group" aria-label="Notes from the board">
           <button class="chip" type="button" data-note="credits" aria-expanded="false">Credits</button>
           <button class="chip" type="button" data-note="app" aria-expanded="false">The App</button>
           <button class="chip" type="button" data-note="github" aria-expanded="false">GitHub</button>
@@ -627,7 +732,7 @@
       </div>
       <div class="foot-links">
         <h3>Chalk it up to good tools</h3>
-        <p>Creative Canvas is a single page studio that lives in your browser: scenes, sources, transitions and code, all on one board. Tap a note under the mascot and he will hold it up for you.</p>
+        <p>Creative Canvas is a single page studio that lives in your browser: scenes, sources, transitions and code, all on one board. Tap a note below and it pops up on the board.</p>
         <ul>
           <li><a href="https://jordanalbiar.github.io/Creative-Canvas/" target="_blank" rel="noopener">Live app</a></li>
           <li><a href="https://github.com/jordanalbiar/Creative-Canvas" target="_blank" rel="noopener">GitHub repo</a></li>
@@ -698,12 +803,12 @@
   var stage = document.getElementById("stageBox");
   var cap = document.getElementById("stageCap");
   var LOGO = "assets/creative-canvas-logo.png";
-  var DOG = "assets/mascot-dog.mp4";
-  var POSTER = "assets/mascot-poster.jpg";
+  var DOG = "assets/chalk-dog.mp4";
+  var POSTER = "assets/chalk-dog-poster.jpg";
   var captions = {
-    main: "<strong>Main Scene.</strong> The chalkboard background fills the canvas, the Creative Canvas logo sits low on the right, and the mascot video plays in front of it, color keyed so the pup walks straight onto the board.",
+    main: "<strong>Main Scene.</strong> The chalkboard background fills the canvas, the Creative Canvas logo sits low on the right, and the dog video plays in front of it, color keyed so the pup walks straight onto the board.",
     code: "<strong>Code Example.</strong> Two live Code sources share this scene, a Matrix rain and falling snow, rendered from raw HTML, CSS and JavaScript. The panel on the right is a Text source explaining the app, under a smaller logo.",
-    background: "<strong>Background Scene.</strong> The mascot, supersized. The dog video takes the right half of the board, flipped to face the big logo on the left, all over the same chalkboard background.",
+    background: "<strong>Background Scene.</strong> The dog, supersized. The dog video takes the right half of the board, flipped to face the big logo on the left, all over the same chalkboard background.",
     blank: "<strong>Blank.</strong> An empty scene with the board wiped clean. Every great lesson, stream and terrible doodle starts here."
   };
   var rainTimer = null;
@@ -747,14 +852,14 @@
     var html = "";
     if (name === "main"){
       html = '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo" style="right:2%;bottom:3%;width:30%;height:27%">' +
-             dogVideo("right:31%;bottom:2%;width:19%;height:21%", "Mascot video playing on the Main Scene");
+             dogVideo("right:31%;bottom:2%;width:19%;height:21%", "Dog video playing on the Main Scene");
     } else if (name === "code"){
       html = '<div class="layer codebox" style="left:9%;top:14%;width:45%;height:30%"><canvas id="rainCanvas" aria-label="Matrix rain code effect"></canvas></div>' +
              '<div class="layer codebox" style="left:9%;top:52%;width:45%;height:32%"><canvas id="snowCanvas" aria-label="Falling snow code effect"></canvas></div>' +
              '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo, small" style="right:6%;top:6%;width:27%;height:26%">' +
              '<div class="layer txtbox" style="right:5%;top:38%;width:27%;height:52%">A dynamic canvas application to create and manage scenes with various media sources like images, videos, text, and browser iframes.</div>';
     } else if (name === "background"){
-      html = dogVideo("right:3%;top:32%;width:48%;height:62%;transform:scaleX(-1)", "Mascot video, large, on the Background Scene") +
+      html = dogVideo("right:3%;top:32%;width:48%;height:62%;transform:scaleX(-1)", "Dog video, large, on the Background Scene") +
              '<img class="layer" src="' + LOGO + '" alt="Creative Canvas chalk logo, large" style="left:3%;top:5%;width:45%;height:48%">';
     } else {
       html = '<div class="layer blank-note"><span>Nothing here yet.</span><span style="font-size:.62em;color:var(--chalk-dim)">That is the point of a blank board.</span></div>';
@@ -834,14 +939,14 @@
   modal.addEventListener("click", function(e){ if (e.target === modal) closeDemo(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !modal.hidden) closeDemo(); });
 
-  /* ---------- footer mascot notes ---------- */
+  /* ---------- footer notes ---------- */
   var notes = {
     credits: { t: "Credits", b: 'Creative Canvas was designed and built by <a href="https://jordanalbiar.github.io" target="_blank" rel="noopener">Jordan Albiar</a>. One developer, one chalkboard, no install required.' },
-    app: { t: "The App", b: 'The live studio runs at <a href="https://jordanalbiar.github.io/Creative-Canvas/" target="_blank" rel="noopener">jordanalbiar.github.io/Creative-Canvas</a>. Open it and the demo scenes, mascot included, are already on the board.' },
+    app: { t: "The App", b: 'The live studio runs at <a href="https://jordanalbiar.github.io/Creative-Canvas/" target="_blank" rel="noopener">jordanalbiar.github.io/Creative-Canvas</a>. Open it and the demo scenes are already on the board.' },
     github: { t: "GitHub", b: 'The full source lives at <a href="https://github.com/jordanalbiar/Creative-Canvas" target="_blank" rel="noopener">github.com/jordanalbiar/Creative-Canvas</a>. Read it, fork it, learn from it.' },
-    coffee: { t: "Buy Me a Coffee", b: 'If Creative Canvas earns a spot in your setup, you can chip in at <a href="https://www.paypal.com/paypalme/jordanalbiar" target="_blank" rel="noopener">paypal.me/jordanalbiar</a>. The mascot accepts treats in spirit.' }
+    coffee: { t: "Buy Me a Coffee", b: 'If Creative Canvas earns a spot in your setup, you can chip in at <a href="https://www.paypal.com/paypalme/jordanalbiar" target="_blank" rel="noopener">paypal.me/jordanalbiar</a>. Every coffee helps keep the board chalked.' }
   };
-  var note = document.getElementById("mascotNote");
+  var note = document.getElementById("dogNote");
   var noteTitle = document.getElementById("noteTitle");
   var noteBody = document.getElementById("noteBody");
   var activeChip = null;
@@ -874,7 +979,7 @@
   document.getElementById("noteClose").addEventListener("click", closeNote);
   document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeNote(); });
   document.addEventListener("click", function(e){
-    if (activeChip && !e.target.closest(".mascot-box")) closeNote();
+    if (activeChip && !e.target.closest(".dog-box")) closeNote();
   });
 })();
 </script>
