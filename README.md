@@ -14,6 +14,23 @@ An OBS style broadcast studio that runs entirely in your browser. No install, no
 
 **Website:** https://jordanalbiar.github.io/Creative-Canvas/website/
 
+## Screenshots
+
+![Dashboard and sources](assets/screenshots/dashboard-overview.png)
+*The dashboard with the Sources panel and the live canvas.*
+
+![Scenes](assets/screenshots/scenes.png)
+*The Scenes panel: Main Scene, Code Example, Background Scene, and Blank, with Cut, Fade, Move, and Stinger transitions.*
+
+![Canvas settings](assets/screenshots/canvas-settings.png)
+*Canvas Settings: Canvas Size Mode, resolution, performance preset, and render scaling.*
+
+![Source settings](assets/screenshots/source-settings.png)
+*Source Settings for the Logo source: position, size, opacity, and filters.*
+
+![Scenes on mobile](assets/screenshots/scenes-mobile.png)
+*The Scenes panel on a phone.*
+
 ## What it does
 
 Creative Canvas Studio is a professional grade interactive canvas editor. Design responsive dynamic layouts, align media content, coordinate layer structures, and control scenes with a real time compositional preview.
