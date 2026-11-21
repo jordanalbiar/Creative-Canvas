@@ -26,9 +26,11 @@
     --wood-dark:#5d3a1e;
     --line:rgba(245,241,227,.55);
     --card:rgba(255,255,255,.045);
+    --ease-pop:cubic-bezier(.2,.8,.25,1);
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
+  section, .card{ scroll-margin-top:84px; }
   body{
     margin:0;
     color:var(--chalk);
@@ -66,16 +68,24 @@
   .brand span{ font-family:"Caveat",cursive; font-size:1.55rem; font-weight:700; }
   nav.mainnav{ display:flex; gap:2px; flex-wrap:wrap; margin-left:auto; }
   .navlink{
-    display:inline-flex; align-items:center; padding:6px 12px;
+    display:inline-flex; align-items:center; padding:6px 12px; position:relative;
     color:var(--chalk-dim); text-decoration:none; font-size:1.02rem; border-radius:8px;
+    transition:color .22s ease, background .22s ease, transform .22s var(--ease-pop);
   }
-  .navlink:hover{ color:var(--yellow); background:rgba(255,255,255,.06); }
+  .navlink::after{
+    content:""; position:absolute; left:12px; right:12px; bottom:2px; height:2px;
+    background:var(--yellow); border-radius:2px; transform:scaleX(0); transform-origin:left;
+    transition:transform .25s var(--ease-pop);
+  }
+  .navlink:hover{ color:var(--yellow); background:rgba(255,255,255,.06); transform:translateY(-1px); }
+  .navlink:hover::after{ transform:scaleX(1); }
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
     padding:9px 20px; border-radius:10px; text-decoration:none; cursor:pointer;
     font-family:"Patrick Hand",cursive; font-size:1.08rem; border:2px dashed transparent;
-    transition:transform .12s ease, background .12s ease;
+    transition:transform .22s var(--ease-pop), background .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease;
   }
+  .btn:hover{ transform:translateY(-2px); }
   .btn:active{ transform:scale(.97); }
   .btn-chalk{ background:var(--chalk); color:#23282c; border-color:var(--chalk); font-weight:400; box-shadow:2px 3px 0 rgba(0,0,0,.4); }
   .btn-chalk:hover{ background:#fffdf4; }
@@ -86,10 +96,10 @@
   .btn-small{ padding:6px 14px; font-size:1rem; }
 
   /* ---------- hero ---------- */
-  .hero{ padding-top:52px; padding-bottom:30px; }
+  .hero{ padding-top:34px; padding-bottom:16px; }
   .hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:38px; align-items:center; }
-  .hero-logo{ width:min(430px, 88%); height:auto; display:block; margin-bottom:10px; }
-  .hero h1{ font-size:clamp(2.5rem, 6vw, 4.1rem); }
+  .hero-logo{ width:min(350px, 80%); height:auto; display:block; margin-bottom:8px; }
+  .hero h1{ font-size:clamp(2.3rem, 5.4vw, 3.6rem); }
   .hero h1 .u-yellow{ color:var(--yellow); }
   .hero p.lede{ font-size:1.22rem; color:var(--chalk-dim); max-width:34rem; margin:16px 0 6px; }
   .hero p.lede strong{ color:var(--chalk); font-weight:400; text-decoration:underline dashed var(--pink) 2px; text-underline-offset:5px; }
@@ -115,35 +125,65 @@
   }
   .frame-cap .star{ color:var(--yellow); font-size:1.2rem; }
 
-  /* ---------- sections ---------- */
-  section{ padding-top:44px; padding-bottom:10px; }
-  .sec-head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
-  .sec-head h2{ font-size:clamp(2rem, 4.6vw, 3rem); }
-  .sec-head .tag{ color:var(--yellow); font-family:"Caveat",cursive; font-size:1.5rem; transform:rotate(-2deg); }
-  .sec-sub{ color:var(--chalk-dim); max-width:44rem; margin:0 0 22px; font-size:1.1rem; }
-  .chalk-rule{ border:none; border-top:3px dashed rgba(245,241,227,.35); margin:34px 0 0; }
+  /* ---------- at-a-glance outline ---------- */
+  .glance{
+    margin-top:6px; border:2px dashed rgba(245,241,227,.45); border-radius:12px;
+    background:rgba(255,255,255,.04); padding:16px 20px 14px;
+  }
+  .glance h2{ font-size:1.9rem; }
+  .glance h2 span{ color:var(--yellow); }
+  .glance .glance-sub{ color:var(--chalk-dim); margin:2px 0 12px; font-size:1rem; }
+  .glance-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px 28px; }
+  .glance-group h3{ font-size:1.4rem; margin-bottom:4px; }
+  .glance-group ul{ list-style:none; margin:0; padding:0; }
+  .glance-group li{ line-height:1.35; }
+  .glance-group a{
+    color:var(--chalk-dim); text-decoration:none; display:inline-flex; align-items:center;
+    gap:7px; min-height:1.9rem; padding:1px 6px; margin-left:-6px; border-radius:6px;
+    transition:color .2s ease, background .2s ease, transform .2s var(--ease-pop);
+  }
+  .glance-group a::before{ content:"\2192"; color:var(--yellow); opacity:.85; transition:transform .2s var(--ease-pop); }
+  .glance-group a:hover{ color:var(--yellow); background:rgba(255,255,255,.06); transform:translateX(3px); }
+  .glance-group a:hover::before{ transform:translateX(2px); }
 
-  .group-title{ font-size:1.9rem; margin:26px 0 12px; display:flex; align-items:center; gap:12px; }
+  /* ---------- sections ---------- */
+  section{ padding-top:28px; padding-bottom:6px; }
+  .sec-head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:6px; }
+  .sec-head h2{ font-size:clamp(1.9rem, 4.2vw, 2.7rem); }
+  .sec-head .tag{ color:var(--yellow); font-family:"Caveat",cursive; font-size:1.5rem; transform:rotate(-2deg); }
+  .sec-sub{ color:var(--chalk-dim); max-width:44rem; margin:0 0 12px; font-size:1.05rem; }
+  .chalk-rule{ border:none; border-top:3px dashed rgba(245,241,227,.35); margin:18px 0 0; }
+
+  .group-title{ font-size:1.6rem; margin:16px 0 8px; display:flex; align-items:center; gap:12px; }
   .group-title .dot{ width:14px; height:14px; border-radius:50%; border:3px solid var(--chalk); display:inline-block; }
-  .cards{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+  .cards{ display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
   .card{
     background:var(--card); border:2px dashed rgba(245,241,227,.4); border-radius:12px;
-    padding:18px 18px 14px; position:relative;
+    padding:12px 14px 10px; position:relative;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{ border-color:rgba(245,241,227,.75); box-shadow:0 6px 18px rgba(0,0,0,.35); }
+  .card:target{ animation:cardFlash 1.4s ease; }
+  @keyframes cardFlash{
+    0%{ box-shadow:0 0 0 3px var(--yellow); }
+    100%{ box-shadow:0 0 0 0 transparent; }
   }
   .card:nth-child(3n+2){ transform:rotate(-.4deg); }
   .card:nth-child(3n){ transform:rotate(.35deg); }
-  .card h3{ font-size:1.55rem; margin-bottom:6px; }
-  .card p{ margin:0; color:var(--chalk-dim); font-size:1.02rem; }
+  .card h3{ font-size:1.35rem; margin-bottom:2px; }
+  .card p{ margin:0; color:var(--chalk-dim); font-size:.95rem; line-height:1.45; }
   .c-yellow h3{ color:var(--yellow); } .c-pink h3{ color:var(--pink); }
   .c-blue h3{ color:var(--blue); } .c-green h3{ color:var(--green); }
   .c-orange h3{ color:var(--orange); } .c-white h3{ color:var(--chalk); }
 
   /* ---------- sources ---------- */
-  .src-grid{ display:grid; grid-template-columns:repeat(7, 1fr); gap:12px; }
+  .src-grid{ display:grid; grid-template-columns:repeat(7, 1fr); gap:10px; }
   .src-tile{
     background:rgba(255,255,255,.05); border:2px solid rgba(245,241,227,.35); border-radius:10px;
-    padding:14px 6px 10px; text-align:center;
+    padding:10px 6px 8px; text-align:center;
+    transition:transform .25s var(--ease-pop), border-color .25s ease, background .25s ease;
   }
+  .src-tile:hover{ transform:translateY(-3px); border-color:var(--yellow); background:rgba(255,255,255,.08); }
   .src-tile .ico{ font-size:1.7rem; display:block; line-height:1.2; filter:grayscale(.15); }
   .src-tile .lbl{ display:block; margin-top:5px; font-size:.98rem; color:var(--chalk); }
   .src-tile .hint{ display:block; font-size:.8rem; color:var(--chalk-faint); line-height:1.3; margin-top:2px; }
@@ -154,14 +194,17 @@
     font-family:"Patrick Hand",cursive; font-size:1.05rem; cursor:pointer;
     background:transparent; color:var(--chalk-dim); border:2px dashed rgba(245,241,227,.4);
     border-radius:10px; padding:8px 16px; min-height:2.75rem;
+    transition:color .22s ease, background .22s ease, border-color .22s ease, transform .22s var(--ease-pop);
   }
-  .scene-tab:hover{ color:var(--chalk); border-color:var(--chalk); }
+  .scene-tab:hover{ color:var(--chalk); border-color:var(--chalk); transform:translateY(-2px); }
   .scene-tab[aria-selected="true"]{ background:var(--chalk); color:#23282c; border-color:var(--chalk); border-style:solid; }
   .stage{
     position:relative; aspect-ratio:16/9; border:3px solid rgba(245,241,227,.85); border-radius:6px;
     overflow:hidden; background:#0c0f12 url(assets/chalkboard.jpg) center/cover;
     box-shadow:10px 14px 30px rgba(0,0,0,.45);
+    transition:opacity .28s ease, transform .28s var(--ease-pop);
   }
+  .stage.is-switching{ opacity:0; transform:translateY(6px) scale(.985); }
   .stage .layer{ position:absolute; }
   .stage video.layer{ object-fit:cover; background:#000; }
   .stage img.layer{ object-fit:contain; }
@@ -174,41 +217,53 @@
     inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
     color:var(--chalk-faint); font-family:"Caveat",cursive; font-size:clamp(1.4rem,3.4vw,2.2rem); text-align:center; padding:20px;
   }
-  .stage-cap{ margin-top:12px; color:var(--chalk-dim); font-size:1.05rem; max-width:46rem; }
+  .stage-cap{ margin-top:12px; color:var(--chalk-dim); font-size:1.05rem; max-width:46rem; transition:opacity .28s ease, transform .28s var(--ease-pop); }
+  .stage-cap.is-switching{ opacity:0; transform:translateY(4px); }
   .stage-cap strong{ color:var(--yellow); font-weight:400; }
 
   /* ---------- steps ---------- */
-  .steps{ display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; counter-reset:step; }
-  .step{ background:var(--card); border:2px dashed rgba(245,241,227,.4); border-radius:12px; padding:16px 14px 12px; }
-  .step .num{
-    width:40px; height:40px; border:3px solid var(--yellow); border-radius:50%;
-    display:flex; align-items:center; justify-content:center; font-family:"Caveat",cursive;
-    font-size:1.5rem; color:var(--yellow); margin-bottom:8px;
+  .steps{ display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; counter-reset:step; }
+  .step{
+    background:var(--card); border:2px dashed rgba(245,241,227,.4); border-radius:12px; padding:12px 12px 9px;
+    transition:border-color .25s ease, box-shadow .25s ease, transform .25s var(--ease-pop);
   }
-  .step h3{ font-size:1.45rem; margin-bottom:4px; }
-  .step p{ margin:0; color:var(--chalk-dim); font-size:.98rem; }
+  .step:hover{ border-color:rgba(245,241,227,.75); box-shadow:0 6px 18px rgba(0,0,0,.35); transform:translateY(-3px); }
+  .step .num{
+    width:34px; height:34px; border:3px solid var(--yellow); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-family:"Caveat",cursive;
+    font-size:1.4rem; color:var(--yellow); margin-bottom:6px;
+  }
+  .step h3{ font-size:1.35rem; margin-bottom:2px; }
+  .step p{ margin:0; color:var(--chalk-dim); font-size:.95rem; line-height:1.45; }
 
   /* ---------- tips / faq ---------- */
   .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start; }
-  .tip{ border-left:4px solid var(--green); padding:4px 0 4px 16px; margin-bottom:18px; }
+  .tip{ border-left:4px solid var(--green); padding:4px 0 4px 16px; margin-bottom:12px; }
   .tip h3{ font-size:1.5rem; color:var(--green); }
   .tip p{ margin:4px 0 0; color:var(--chalk-dim); }
   details.faq{
-    border:2px dashed rgba(245,241,227,.35); border-radius:10px; margin-bottom:12px;
+    border:2px dashed rgba(245,241,227,.35); border-radius:10px; margin-bottom:8px;
     background:rgba(255,255,255,.04); padding:2px 16px;
+    transition:border-color .25s ease, background .25s ease;
   }
+  details.faq[open ]{ border-color:rgba(245,241,227,.6); background:rgba(255,255,255,.06); }
   details.faq summary{
     cursor:pointer; font-family:"Caveat",cursive; font-size:1.45rem; font-weight:600;
     display:flex; align-items:center; padding:8px 0; list-style:none; color:var(--chalk);
   }
   details.faq summary::-webkit-details-marker{ display:none; }
-  details.faq summary::after{ content:"+"; margin-left:auto; color:var(--yellow); font-size:1.6rem; }
-  details.faq[open ] summary::after{ content:"-"; }
+  details.faq summary::after{
+    content:"+"; margin-left:auto; color:var(--yellow); font-size:1.6rem;
+    transition:transform .3s var(--ease-pop);
+  }
+  details.faq[open ] summary::after{ transform:rotate(45deg); }
   details.faq p{ margin:0 0 12px; color:var(--chalk-dim); }
+  details.faq[open ] p{ animation:faqIn .3s var(--ease-pop); }
+  @keyframes faqIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:translateY(0); } }
 
   /* ---------- open app panel ---------- */
   .open-panel{
-    border:3px solid rgba(245,241,227,.85); border-radius:8px; padding:30px 28px;
+    border:3px solid rgba(245,241,227,.85); border-radius:8px; padding:20px 22px;
     background:rgba(16,20,23,.72); text-align:center; position:relative; overflow:hidden;
   }
   .open-panel h2{ font-size:clamp(2.1rem, 5vw, 3.2rem); }
@@ -218,18 +273,30 @@
   .open-panel .mini-dog video{ width:100%; display:block; }
 
   /* ---------- footer ---------- */
-  footer{ margin-top:56px; border-top:3px solid var(--wood); background:rgba(20,24,28,.94); }
-  .foot-in{ max-width:1120px; margin:0 auto; padding:30px 20px 26px; }
+  footer{ margin-top:36px; border-top:3px solid var(--wood); background:rgba(20,24,28,.94); }
+  .foot-in{ max-width:1120px; margin:0 auto; padding:22px 20px 20px; }
   .foot-grid{ display:grid; grid-template-columns:300px 1fr; gap:30px; align-items:start; }
   .mascot-box{ position:relative; }
   .mascot-box .chalk-frame video{ aspect-ratio:688/464; object-fit:cover; }
   .mascot-note{
     position:absolute; inset:auto 10px 10px 10px; z-index:5;
     background:#fdfbef; color:#2c2c26; border-radius:4px; padding:12px 14px;
-    box-shadow:4px 6px 16px rgba(0,0,0,.5); transform:rotate(-1.2deg);
-    font-size:.98rem; line-height:1.45; display:none;
+    box-shadow:4px 6px 16px rgba(0,0,0,.5);
+    font-size:.98rem; line-height:1.45;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transform:rotate(-1.2deg) translateY(12px) scale(.95); transform-origin:bottom center;
+    transition:opacity .3s ease, transform .3s var(--ease-pop), visibility 0s linear .3s;
   }
-  .mascot-note.open{ display:block; }
+  .mascot-note.open{
+    opacity:1; visibility:visible; pointer-events:auto;
+    transform:rotate(-1.2deg) translateY(0) scale(1);
+    transition:opacity .3s ease, transform .3s var(--ease-pop), visibility 0s;
+  }
+  .mascot-note.swap{ animation:noteSwap .3s var(--ease-pop); }
+  @keyframes noteSwap{
+    0%{ opacity:.35; transform:rotate(-1.2deg) translateY(5px) scale(.98); }
+    100%{ opacity:1; transform:rotate(-1.2deg) translateY(0) scale(1); }
+  }
   .mascot-note h3{ font-size:1.4rem; color:#2c2c26; margin-bottom:2px; }
   .mascot-note p{ margin:0; }
   .mascot-note a{ color:#1c5d8f; }
@@ -242,8 +309,9 @@
     font-family:"Patrick Hand",cursive; font-size:1rem; cursor:pointer; min-height:2.75rem;
     background:transparent; color:var(--chalk); border:2px dashed rgba(245,241,227,.55);
     border-radius:999px; padding:7px 16px;
+    transition:color .22s ease, background .22s ease, border-color .22s ease, transform .22s var(--ease-pop);
   }
-  .chip:hover{ border-color:var(--yellow); color:var(--yellow); }
+  .chip:hover{ border-color:var(--yellow); color:var(--yellow); transform:translateY(-2px); }
   .chip[aria-expanded="true"]{ background:var(--yellow); border-color:var(--yellow); color:#2b2110; border-style:solid; }
   .foot-links h3{ font-size:1.7rem; margin-bottom:8px; }
   .foot-links p{ color:var(--chalk-dim); margin:0 0 10px; max-width:36rem; }
@@ -258,14 +326,22 @@
   /* ---------- demo modal ---------- */
   .modal-back{
     position:fixed; inset:0; z-index:100; background:rgba(8,10,12,.86);
-    display:none; align-items:center; justify-content:center; padding:12px;
+    display:flex; align-items:center; justify-content:center; padding:12px;
+    opacity:0; visibility:hidden;
+    transition:opacity .32s ease, visibility 0s linear .32s;
   }
-  .modal-back.open{ display:flex; }
+  .modal-back.open{
+    opacity:1; visibility:visible;
+    transition:opacity .32s ease, visibility 0s;
+  }
   .modal-box{
     width:90vw; height:90vh; max-width:1500px; display:flex; flex-direction:column;
     background:#14181c; border:3px solid rgba(245,241,227,.85); border-radius:10px; overflow:hidden;
     box-shadow:0 30px 80px rgba(0,0,0,.6);
+    opacity:0; transform:translateY(18px) scale(.97);
+    transition:opacity .32s ease, transform .34s var(--ease-pop);
   }
+  .modal-back.open .modal-box{ opacity:1; transform:translateY(0) scale(1); }
   .modal-bar{
     display:flex; align-items:center; gap:14px; padding:8px 14px; flex-wrap:wrap;
     border-bottom:2px dashed rgba(245,241,227,.35);
@@ -276,6 +352,8 @@
 
   @media (max-width: 900px){
     .hero-grid{ grid-template-columns:1fr; }
+    .glance-grid{ grid-template-columns:1fr; gap:4px 0; }
+    .glance-group ul{ display:grid; grid-template-columns:1fr 1fr; column-gap:18px; }
     .cards{ grid-template-columns:1fr 1fr; }
     .src-grid{ grid-template-columns:repeat(4, 1fr); }
     .steps{ grid-template-columns:1fr 1fr; }
@@ -285,14 +363,15 @@
   }
   @media (max-width: 560px){
     .cards{ grid-template-columns:1fr; }
+    .glance-group ul{ grid-template-columns:1fr; }
     .src-grid{ grid-template-columns:repeat(3, 1fr); }
     .steps{ grid-template-columns:1fr; }
     .brand span{ display:none; }
-    .hero{ padding-top:34px; }
+    .hero{ padding-top:26px; }
   }
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
-    .btn{ transition:none; }
+    *, *::before, *::after{ transition:none !important; animation:none !important; }
   }
 </style>
 </head>
@@ -341,6 +420,49 @@
     </div>
   </div>
 
+  <!-- AT A GLANCE -->
+  <section class="wrap" aria-labelledby="glance-h" style="padding-top:6px">
+    <div class="glance" id="glance">
+      <h2 id="glance-h">The whole toolbox, <span>at a glance</span></h2>
+      <p class="glance-sub">All eighteen features on one board. Tap any line to jump straight to its card below.</p>
+      <div class="glance-grid">
+        <div class="glance-group">
+          <h3 style="color:var(--yellow)">Build your stage</h3>
+          <ul>
+            <li><a href="#f-compose">Compose scenes</a></li>
+            <li><a href="#f-drag">Drag, resize, layer</a></li>
+            <li><a href="#f-switch">Switch with style</a></li>
+            <li><a href="#f-undo">Undo, redo, relax</a></li>
+            <li><a href="#f-snap">Snap and center</a></li>
+            <li><a href="#f-hotkeys">Your own hotkeys</a></li>
+          </ul>
+        </div>
+        <div class="glance-group">
+          <h3 style="color:var(--pink)">Bring in your media</h3>
+          <ul>
+            <li><a href="#f-fourteen">Fourteen source types</a></li>
+            <li><a href="#f-live">Go live on the canvas</a></li>
+            <li><a href="#f-paint">Paint on top of it all</a></li>
+            <li><a href="#f-code">Run your own code</a></li>
+            <li><a href="#f-stream">Stream players built in</a></li>
+            <li><a href="#f-galleries">Galleries that cycle</a></li>
+          </ul>
+        </div>
+        <div class="glance-group">
+          <h3 style="color:var(--blue)">Make it yours, keep it safe</h3>
+          <ul>
+            <li><a href="#f-key">Key out the background</a></li>
+            <li><a href="#f-filters">Filters and shapes</a></li>
+            <li><a href="#f-themes">Nine themes</a></li>
+            <li><a href="#f-4k">Canvas up to 4K</a></li>
+            <li><a href="#f-save">Save and share projects</a></li>
+            <li><a href="#f-smooth">Keep it smooth</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- WHAT'S INSIDE -->
   <section id="inside" class="wrap" aria-labelledby="inside-h">
     <div class="sec-head">
@@ -351,32 +473,32 @@
 
     <h3 class="group-title"><span class="dot" style="border-color:var(--yellow)" aria-hidden="true"></span><span style="color:var(--yellow)">Build your stage</span></h3>
     <div class="cards">
-      <article class="card c-yellow"><h3>Compose scenes</h3><p>Build as many scenes as you need, each with its own layout, background color and set of sources, then hop between them live.</p></article>
-      <article class="card c-yellow"><h3>Drag, resize, layer</h3><p>Move and scale any source right on the canvas, rotate it, flip it, set its opacity, reorder the stack, or lock it in place when it is perfect.</p></article>
-      <article class="card c-yellow"><h3>Switch with style</h3><p>Cut instantly or glide between scenes with Fade, Move and Stinger transitions, each with its own speed and easing.</p></article>
-      <article class="card c-yellow"><h3>Undo, redo, relax</h3><p>Every layout change is tracked, so you can step back and forth through your edits until the board looks right.</p></article>
-      <article class="card c-yellow"><h3>Snap and center</h3><p>Turn on snap to grid for tidy layouts, center a source in one tap, or blow it up to fullscreen and restore it just as fast.</p></article>
-      <article class="card c-yellow"><h3>Your own hotkeys</h3><p>Bind keys to scenes and everyday actions like centering, locking and hiding, then run the whole show from the keyboard.</p></article>
+      <article id="f-compose" class="card c-yellow"><h3>Compose scenes</h3><p>Build as many scenes as you need, each with its own layout, background color and set of sources, then hop between them live.</p></article>
+      <article id="f-drag" class="card c-yellow"><h3>Drag, resize, layer</h3><p>Move and scale any source right on the canvas, rotate it, flip it, set its opacity, reorder the stack, or lock it in place when it is perfect.</p></article>
+      <article id="f-switch" class="card c-yellow"><h3>Switch with style</h3><p>Cut instantly or glide between scenes with Fade, Move and Stinger transitions, each with its own speed and easing.</p></article>
+      <article id="f-undo" class="card c-yellow"><h3>Undo, redo, relax</h3><p>Every layout change is tracked, so you can step back and forth through your edits until the board looks right.</p></article>
+      <article id="f-snap" class="card c-yellow"><h3>Snap and center</h3><p>Turn on snap to grid for tidy layouts, center a source in one tap, or blow it up to fullscreen and restore it just as fast.</p></article>
+      <article id="f-hotkeys" class="card c-yellow"><h3>Your own hotkeys</h3><p>Bind keys to scenes and everyday actions like centering, locking and hiding, then run the whole show from the keyboard.</p></article>
     </div>
 
     <h3 class="group-title"><span class="dot" style="border-color:var(--pink)" aria-hidden="true"></span><span style="color:var(--pink)">Bring in your media</span></h3>
     <div class="cards">
-      <article class="card c-pink"><h3>Fourteen source types</h3><p>Text, images, video, camera, screen capture, web pages, color blocks, galleries, code, paint, a visualizer, emoji, YouTube and Twitch. The full panel is chalked up below.</p></article>
-      <article class="card c-pink"><h3>Go live on the canvas</h3><p>Drop in your webcam or share your screen as a source, side by side with everything else in the scene.</p></article>
-      <article class="card c-pink"><h3>Paint on top of it all</h3><p>The Paint source is a whiteboard layer that sits over your scene, with your choice of brush size and color, for annotating live.</p></article>
-      <article class="card c-pink"><h3>Run your own code</h3><p>Code sources render your HTML, CSS and JavaScript in an isolated widget, so you can build particles, tickers and effects right on the canvas. The demo ships with a Matrix rain to prove it.</p></article>
-      <article class="card c-pink"><h3>Stream players built in</h3><p>YouTube and Twitch sources play inside your scene, with playlist support on YouTube and video plus chat layouts on Twitch.</p></article>
-      <article class="card c-pink"><h3>Galleries that cycle</h3><p>Load a set of images into a Gallery source and let it rotate through them on a timer you set.</p></article>
+      <article id="f-fourteen" class="card c-pink"><h3>Fourteen source types</h3><p>Text, images, video, camera, screen capture, web pages, color blocks, galleries, code, paint, a visualizer, emoji, YouTube and Twitch. The full panel is chalked up below.</p></article>
+      <article id="f-live" class="card c-pink"><h3>Go live on the canvas</h3><p>Drop in your webcam or share your screen as a source, side by side with everything else in the scene.</p></article>
+      <article id="f-paint" class="card c-pink"><h3>Paint on top of it all</h3><p>The Paint source is a whiteboard layer that sits over your scene, with your choice of brush size and color, for annotating live.</p></article>
+      <article id="f-code" class="card c-pink"><h3>Run your own code</h3><p>Code sources render your HTML, CSS and JavaScript in an isolated widget, so you can build particles, tickers and effects right on the canvas. The demo ships with a Matrix rain to prove it.</p></article>
+      <article id="f-stream" class="card c-pink"><h3>Stream players built in</h3><p>YouTube and Twitch sources play inside your scene, with playlist support on YouTube and video plus chat layouts on Twitch.</p></article>
+      <article id="f-galleries" class="card c-pink"><h3>Galleries that cycle</h3><p>Load a set of images into a Gallery source and let it rotate through them on a timer you set.</p></article>
     </div>
 
     <h3 class="group-title"><span class="dot" style="border-color:var(--blue)" aria-hidden="true"></span><span style="color:var(--blue)">Make it yours, keep it safe</span></h3>
     <div class="cards">
-      <article class="card c-blue"><h3>Key out the background</h3><p>Chroma key and color key controls with sensitivity sliders let you lift a subject off a solid backdrop, green screen style.</p></article>
-      <article class="card c-blue"><h3>Filters and shapes</h3><p>Shift the hue, add blur or sharpness, and mask a source into a circle, oval, triangle, diamond, star or hexagon.</p></article>
-      <article class="card c-blue"><h3>Nine themes</h3><p>Restyle the whole studio in one pick: Light, Dark, Crimson, Metallic, Lime, Purple, Lemon, Silverado or Orange.</p></article>
-      <article class="card c-blue"><h3>Canvas up to 4K</h3><p>Set your canvas resolution from 240p all the way to 4K, and preview it fit to screen or at true size.</p></article>
-      <article class="card c-blue"><h3>Save and share projects</h3><p>Export a whole project, a scene&rsquo;s sources, your settings, or a full master backup to a file, then import it back on any machine.</p></article>
-      <article class="card c-blue"><h3>Keep it smooth</h3><p>Performance presets, a frame rate limit and a render scale dial let you trade a little sparkle for a lot of smoothness on modest hardware.</p></article>
+      <article id="f-key" class="card c-blue"><h3>Key out the background</h3><p>Chroma key and color key controls with sensitivity sliders let you lift a subject off a solid backdrop, green screen style.</p></article>
+      <article id="f-filters" class="card c-blue"><h3>Filters and shapes</h3><p>Shift the hue, add blur or sharpness, and mask a source into a circle, oval, triangle, diamond, star or hexagon.</p></article>
+      <article id="f-themes" class="card c-blue"><h3>Nine themes</h3><p>Restyle the whole studio in one pick: Light, Dark, Crimson, Metallic, Lime, Purple, Lemon, Silverado or Orange.</p></article>
+      <article id="f-4k" class="card c-blue"><h3>Canvas up to 4K</h3><p>Set your canvas resolution from 240p all the way to 4K, and preview it fit to screen or at true size.</p></article>
+      <article id="f-save" class="card c-blue"><h3>Save and share projects</h3><p>Export a whole project, a scene&rsquo;s sources, your settings, or a full master backup to a file, then import it back on any machine.</p></article>
+      <article id="f-smooth" class="card c-blue"><h3>Keep it smooth</h3><p>Performance presets, a frame rate limit and a render scale dial let you trade a little sparkle for a lot of smoothness on modest hardware.</p></article>
     </div>
     <hr class="chalk-rule" />
   </section>
@@ -667,9 +789,21 @@
   }
   document.querySelectorAll(".scene-tab").forEach(function(tab){
     tab.addEventListener("click", function(){
+      if (tab.getAttribute("aria-selected") === "true") return;
       document.querySelectorAll(".scene-tab").forEach(function(t){ t.setAttribute("aria-selected","false"); });
       tab.setAttribute("aria-selected","true");
-      renderScene(tab.getAttribute("data-scene"));
+      if (reduced){
+        renderScene(tab.getAttribute("data-scene"));
+        return;
+      }
+      stage.classList.add("is-switching");
+      cap.classList.add("is-switching");
+      setTimeout(function(){
+        renderScene(tab.getAttribute("data-scene"));
+        void stage.offsetWidth;
+        stage.classList.remove("is-switching");
+        cap.classList.remove("is-switching");
+      }, 200);
     });
   });
   renderScene("main");
@@ -682,14 +816,18 @@
     lastFocus = document.activeElement;
     if (!frame.getAttribute("src")) frame.setAttribute("src", "https://jordanalbiar.github.io/Creative-Canvas/");
     modal.hidden = false;
-    requestAnimationFrame(function(){ modal.classList.add("open"); });
+    void modal.offsetWidth;
+    modal.classList.add("open");
     document.getElementById("demoClose").focus();
     document.body.style.overflow = "hidden";
   }
   function closeDemo(){
-    modal.classList.remove("open"); modal.hidden = true;
+    modal.classList.remove("open");
     document.body.style.overflow = "";
     if (lastFocus && lastFocus.focus) lastFocus.focus();
+    setTimeout(function(){
+      if (!modal.classList.contains("open")) modal.hidden = true;
+    }, 340);
   }
   document.querySelectorAll("[data-open-demo]").forEach(function(b){ b.addEventListener("click", openDemo); });
   document.getElementById("demoClose").addEventListener("click", closeDemo);
@@ -715,7 +853,17 @@
     chip.addEventListener("click", function(){
       var key = chip.getAttribute("data-note");
       if (activeChip === chip){ closeNote(); return; }
-      closeNote();
+      if (activeChip){
+        noteTitle.textContent = notes[key].t;
+        noteBody.innerHTML = notes[key].b;
+        activeChip.setAttribute("aria-expanded","false");
+        chip.setAttribute("aria-expanded","true");
+        activeChip = chip;
+        note.classList.remove("swap");
+        void note.offsetWidth;
+        note.classList.add("swap");
+        return;
+      }
       noteTitle.textContent = notes[key].t;
       noteBody.innerHTML = notes[key].b;
       note.classList.add("open");
